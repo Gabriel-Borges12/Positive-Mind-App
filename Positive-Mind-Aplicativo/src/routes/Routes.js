@@ -4,6 +4,8 @@ import { Ionicons } from "@expo/vector-icons";
 
 import Login from '../screens/Login';
 import Login from '../screens/Home';
+import Login from '../screens/RedefinirSenha';
+import Login from '../screens/Motivacao';
 
 const TabBottom = createBottomTabNavigator();
 
