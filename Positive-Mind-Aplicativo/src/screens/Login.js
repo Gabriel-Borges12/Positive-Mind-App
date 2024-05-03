@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'reac
 export default function App() {
   return (
     <View style={styles.container}>
-        <Image source={require('../logopadrao.png')} style={styles.logo} />
+        <Image source={require('../assets/logopadrao.png')} style={styles.logo} />
       <Text style={styles.agradecimento}>Bem Vindo!</Text>
       <Text style={styles.cadastro}>Não tem uma conta? Inscreva-se</Text>
 
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#86BAA0', // Cor verde
     color: '#fff', // Cor do texto
     fontSize: 18,
-    padding: 40, // Aumentando o padding
+    padding: 25, // Aumentando o padding
     borderRadius: 40,
     marginTop: 20,
   },
