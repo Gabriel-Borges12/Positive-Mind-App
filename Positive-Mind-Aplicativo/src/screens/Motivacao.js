@@ -19,9 +19,6 @@ export default function Motivacao({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.titulo}>Frase Motivadora</Text>
-            </View>
             <View style={styles.content}>
                 <View style={styles.form}>
                     <View style={styles.containerFrases}>
@@ -32,32 +29,8 @@ export default function Motivacao({ navigation }) {
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style={styles.footer}>
-                <View style={styles.footerContent}>
-                    <Text style={styles.textoFooter}>Menu</Text>
-                    <Text style={styles.textoFooterLink}>Página Inicial</Text>
-                    <Text style={styles.textoFooterLink}>Termos de Uso</Text>
-                    <Text style={styles.textoFooterLink}>Comunidade</Text>
-                    <Text style={styles.textoFooterLink}>Fale Conosco</Text>
-                </View>
-                <View style={styles.footerContent}>
-                    <Text style={styles.textoFooter}>Contato</Text>
-                    <Text style={styles.textoFooter}>positivemindhealther@gmail.com</Text>
-                    <Text style={styles.textoFooter}>21 90000-0000</Text>
-                    <Text style={styles.textoFooter}>21 90000-0000</Text>
-                </View>
-                <View style={styles.footerContent}>
-                    <Text style={styles.textoFooter}>Redes Sociais</Text>
-                    <Text style={styles.textoFooterLink}>Facebook</Text>
-                    <Text style={styles.textoFooterLink}>Instagram</Text>
-                    <Text style={styles.textoFooterLink}>Twitter</Text>
-                    <Text style={styles.textoFooterLink}>Gmail</Text>
-                </View>
-                <View style={styles.footerContent}>
-                    <Text style={styles.textoFooter}>Positive Mind - 2024, todos os direitos reservados.</Text>
-                    <Text style={styles.textoFooter}>Desenvolvido por Healther</Text>
-                </View>
-            </View>
+           
+        
         </View>
     );
 }

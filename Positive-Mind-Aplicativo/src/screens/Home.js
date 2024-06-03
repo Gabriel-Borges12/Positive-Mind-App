@@ -28,7 +28,7 @@ export default function App() {
       <View style={styles.rowContainer}>
         <TouchableOpacity style={styles.button}>
           <Image source={require('../assets/iconrelaxar.png')} style={styles.image} />
-          <Text style={styles.subtitle}>comunidade</Text>
+          <Text style={styles.subtitle}>Comunidade</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.button}>

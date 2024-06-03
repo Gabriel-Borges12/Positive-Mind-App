@@ -19,14 +19,6 @@ const SobreScreen = () => {
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContainer} horizontal={false}>
                 <View style={styles.innerContainer}>
-                    <View style={styles.navbar}>
-                        <Image source={require('../assets/logopadrao.png')} style={styles.logo} />
-                        <View style={styles.navSpace}>
-                            <Text style={styles.navHome}>Quem somos?</Text>
-                            <Text style={styles.navHome}>Entrar</Text>
-                        </View>
-                    </View>
-
                     <View style={styles.banner}>
                         <Image source={require('../assets/BannerPaginaIndex.png')} style={styles.bannerImage} />
                     </View>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "222028872969",
+    "project_id": "positivemind-8e0f0",
+    "storage_bucket": "positivemind-8e0f0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:222028872969:android:053b580daedb5a586527d8",
+        "android_client_info": {
+          "package_name": "healther.positive"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEtjlwJRIpm5qOHI4ra9IgLf4wKSLKVOE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,7 @@
+buildscript {
+    dependencies {
+        // Adicione esta linha
+        classpath 'com.google.gms:google-services:4.3.10'
+    }
+}
+apply plugin: 'com.google.gms.google-services'

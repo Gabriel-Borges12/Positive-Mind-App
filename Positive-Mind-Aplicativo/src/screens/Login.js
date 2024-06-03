@@ -1,87 +1,202 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native'; // Troquei Button por TouchableOpacity
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 
-export default function App() {
+// Ajuste os caminhos das importações conforme a estrutura do seu projeto
+import logo from '../assets/image5.png';
+import banner from '../assets/telaInicial.png';
+import googleIcon from '../assets/google.png';
+import emailIcon from '../assets/icons8-nova-mensagem-50.png';
+import passwordIcon from '../assets/icons8-lock-50.png';
+
+const LoginScreen = () => {
+  const [emailFocused, setEmailFocused] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
+
   return (
     <View style={styles.container}>
-        <Image source={require('../assets/logopadrao.png')} style={styles.logo} />
-      <Text style={styles.agradecimento}>Bem Vindo!</Text>
-      <Text style={styles.cadastro}>Não tem uma conta? Inscreva-se</Text>
-
-      <TextInput style={styles.inputs} placeholder="Nome de usuário ou Email" />
-      <TextInput style={styles.inputs} placeholder="Senha" secureTextEntry={true} />
-
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>LOGIN</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.link}>
-        Esqueceu a senha? <Text style={styles.helpLink}>Obtenha ajuda</Text> para redefinir sua senha.
-      </Text>
-
-      <Text style={styles.healthMessage}>Priorize sua saúde mental</Text> {/* Adicionando a nova frase */}
-      <StatusBar style="auto" />
+      <View style={styles.logoContainer}>
+        <Image source={logo} style={styles.logo} />
+        <Text style={styles.logoText}>Positive Mind</Text>
+      </View>
+      <Image source={banner} style={styles.banner} />
+      <View style={styles.bottomContainer}>
+        <View style={styles.whiteContainer}>
+          <View style={[styles.inputContainer, emailFocused && styles.inputContainerFocused]}>
+            <Text style={styles.inputLabel}>E-mail</Text>
+            <View style={styles.inputWrapper}>
+              <Image source={emailIcon} style={styles.inputIcon} />
+              <TextInput
+                style={styles.input}
+                keyboardType="email-address"
+                onFocus={() => setEmailFocused(true)}
+                onBlur={() => setEmailFocused(false)}
+              />
+            </View>
+          </View>
+          <View style={[styles.inputContainer, passwordFocused && styles.inputContainerFocused]}>
+            <Text style={styles.inputLabel}>Senha</Text>
+            <View style={styles.inputWrapper}>
+              <Image source={passwordIcon} style={styles.inputIcon} />
+              <TextInput
+                style={styles.input}
+                secureTextEntry
+                onFocus={() => setPasswordFocused(true)}
+                onBlur={() => setPasswordFocused(false)}
+              />
+            </View>
+          </View>
+          <TouchableOpacity>
+            <Text style={styles.forgotPassword}>Esqueceu sua senha?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Entrar</Text>
+          </TouchableOpacity>
+          <Text style={styles.orText}>ou</Text>
+          <TouchableOpacity style={styles.googleButton}>
+            <Image source={googleIcon} style={styles.googleIcon} />
+            <Text style={styles.googleButtonText}>Entrar com o Google</Text>
+          </TouchableOpacity>
+          <Text style={styles.signupText}>
+            É novo por aqui? <Text style={styles.signupLink}>Cadastre-se</Text>
+          </Text>
+        </View>
+      </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#E9F5F2',
+    alignItems: 'center',
+  },
+  logoContainer: {
+    position: 'absolute',
+    top: 0,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    width: '100%',
+    paddingTop: 20, // Espaçamento para acomodar a logo
   },
-  agradecimento: {
-    fontSize: 24,
-    marginBottom: 20,
-  },
-  cadastro: {
-    fontSize: 15,
-    marginBottom: 18
-  },
-  inputs: {
+  logo: {
+    width: 40,
     height: 40,
-    width: 300,
-    borderColor: 'gray',
+    resizeMode: 'contain',
+    marginRight: 10,
+  },
+  logoText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#4CAF50',
+  },
+  banner: {
+    width: '100%',
+    height: 200, // Altura reduzida para mover a imagem para cima
+    resizeMode: 'contain',
+    marginTop: 60, // Movido para cima
+  },
+  bottomContainer: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    alignItems: 'center',
+  },
+  whiteContainer: {
+    width: '95%',
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 5,
+  },
+  inputContainer: {
+    width: '100%',
+    marginBottom: 15,
+  },
+  inputContainerFocused: {
+    borderColor: '#25724D', // Cor quando o input está focado
+  },
+  inputLabel: {
+    alignSelf: 'flex-start',
+    marginBottom: 5,
+    color: '#555',
+  },
+  inputWrapper: {
+    position: 'relative',
+    width: '100%',
+  },
+  inputIcon: {
+    position: 'absolute',
+    left: 15,
+    top: 15,
+    width: 20,
+    height: 20,
+    resizeMode: 'contain',
+  },
+  input: {
+    backgroundColor: '#fff',
+    padding: 15,
+    paddingLeft: 45,
+    borderRadius: 10,
     borderWidth: 1,
-    marginBottom: 20,
-    paddingLeft: 10,
+    borderColor: '#71BE99',
+  },
+  forgotPassword: {
+    alignSelf: 'flex-end',
+    color: '#71BE99', 
+    marginBottom: 10,
   },
   button: {
-    backgroundColor: '#86BAA0',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
+    backgroundColor: '#1B7349',
+    padding: 15,
+    borderRadius: 10,
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 15,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 18,
-    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
-  link: {
-    fontSize: 15,
-    marginTop: 20,
-    textAlign: 'center',
+  orText: {
+    marginBottom: 10,
+    color: '#555',
   },
-  helpLink: {
-    color: '#86BAA0',
-    textDecorationLine: 'none',
+  googleButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    padding: 15,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    width: '100%',
+    marginBottom: 15,
   },
-  healthMessage: {
-    backgroundColor: '#86BAA0', // Cor verde
-    color: '#fff', // Cor do texto
-    fontSize: 18,
-    padding: 25, // Aumentando o padding
-    borderRadius: 40,
-    marginTop: 20,
+  googleIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
   },
-  logoContainer: {
-    marginTop: 40,
+  googleButtonText: {
+    fontSize: 16,
+    color: '#555',
   },
-  logo: {
-    width: 200,
-    height: 200,
-    resizeMode: 'contain', // Para ajustar o tamanho da imagem
+  signupText: {
+    color: '#555',
+  },
+  signupLink: {
+    color: '#71BE99', 
+    fontWeight: 'bold',
   },
 });
+
+export default LoginScreen;
