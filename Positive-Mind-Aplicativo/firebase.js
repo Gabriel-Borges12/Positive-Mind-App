@@ -1,16 +1,11 @@
-// firebase.js
-import firestore from '@react-native-firebase/firestore';
+import { initializeApp } from "firebase/app";
 
-export const firebaseFirestore = firestore();
-
-// Verificar se está conectado
-export const isFirestoreConnected = async () => {
-  try {
-    await firebaseFirestore.settings({ timestampsInSnapshots: true });
-    console.log('Firestore está conectado!');
-    return true;
-  } catch (error) {
-    console.error('Erro ao conectar ao Firestore:', error);
-    return false;
-  }
-};
+export const firebaseApp = initializeApp ({
+  apiKey: "AIzaSyD_Jh9mic3StjEPajei82QjZBPrLRueQEM",
+  authDomain: "positivemind-9937c.firebaseapp.com",
+  projectId: "positivemind-9937c",
+  storageBucket: "positivemind-9937c.appspot.com",
+  messagingSenderId: "61713422871",
+  appId: "1:61713422871:web:55415bfca3f27028e71a52",
+  measurementId: "G-EFDDNGPJWF"
+});

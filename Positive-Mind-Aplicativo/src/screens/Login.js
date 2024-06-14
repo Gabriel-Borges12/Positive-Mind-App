@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import * as Animatable from 'react-native-animatable';
 
-// Ajuste os caminhos das importações conforme a estrutura do seu projeto
 import logo from '../assets/image5.png';
 import banner from '../assets/telaInicial.png';
 import googleIcon from '../assets/google.png';
@@ -9,17 +10,38 @@ import emailIcon from '../assets/icons8-nova-mensagem-50.png';
 import passwordIcon from '../assets/icons8-lock-50.png';
 
 const LoginScreen = () => {
+  const navigation = useNavigation();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
+
+  const handleLogin = () => {
+    // Simulação de validação de login
+    if (email === 'userteste@gmail.com' && password === '1234') {
+      navigation.navigate('MainTabs', { screen: 'Home' });
+    } else {
+      Alert.alert('Erro', 'Credenciais inválidas. Por favor, verifique seu e-mail e senha.');
+    }
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
-        <Image source={logo} style={styles.logo} />
-        <Text style={styles.logoText}>Positive Mind</Text>
+        <Animatable.Image  
+          animation="flipInY"
+          source={logo} 
+          style={styles.logo} />
+        <Animatable.Text  
+          animation="flipInY" 
+          style={styles.logoText}>Positive Mind</Animatable.Text>
       </View>
-      <Image source={banner} style={styles.banner} />
-      <View style={styles.bottomContainer}>
+      <Animatable.Image  
+        animation="flipInY"
+        source={banner} 
+        style={styles.banner} />
+
+      <Animatable.View delay={600} animation="fadeInUp" style={styles.bottomContainer}>
         <View style={styles.whiteContainer}>
           <View style={[styles.inputContainer, emailFocused && styles.inputContainerFocused]}>
             <Text style={styles.inputLabel}>E-mail</Text>
@@ -28,6 +50,8 @@ const LoginScreen = () => {
               <TextInput
                 style={styles.input}
                 keyboardType="email-address"
+                value={email}
+                onChangeText={setEmail}
                 onFocus={() => setEmailFocused(true)}
                 onBlur={() => setEmailFocused(false)}
               />
@@ -40,6 +64,8 @@ const LoginScreen = () => {
               <TextInput
                 style={styles.input}
                 secureTextEntry
+                value={password}
+                onChangeText={setPassword}
                 onFocus={() => setPasswordFocused(true)}
                 onBlur={() => setPasswordFocused(false)}
               />
@@ -48,7 +74,7 @@ const LoginScreen = () => {
           <TouchableOpacity>
             <Text style={styles.forgotPassword}>Esqueceu sua senha?</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
             <Text style={styles.buttonText}>Entrar</Text>
           </TouchableOpacity>
           <Text style={styles.orText}>ou</Text>
@@ -57,10 +83,10 @@ const LoginScreen = () => {
             <Text style={styles.googleButtonText}>Entrar com o Google</Text>
           </TouchableOpacity>
           <Text style={styles.signupText}>
-            É novo por aqui? <Text style={styles.signupLink}>Cadastre-se</Text>
+            É novo por aqui? <Text style={styles.signupLink} onPress={() => navigation.navigate('Cadastro')}>Cadastre-se</Text>
           </Text>
         </View>
-      </View>
+      </Animatable.View>
     </View>
   );
 };
