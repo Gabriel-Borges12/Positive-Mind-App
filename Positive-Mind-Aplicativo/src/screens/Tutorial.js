@@ -8,29 +8,29 @@ const App = () => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View style={styles.header}>
-          <Image source={require('./assets/mental 1.png')} style={styles.headerImage} />
+          <Image source={require('../assets/mental 1.png')} style={styles.headerImage} />
           <View style={styles.overlay} />
           <Text style={styles.title}>Como está sua saúde mental?</Text>
         </View>
         
         <View style={styles.section}>
-          <Image source={require('./assets/Ellipse 3.png')} style={styles.sectionImage} />
+          <Image source={require('../assets/Ellipse 3.png')} style={styles.sectionImage} />
           <Text style={[styles.text, styles.centerText]}>Já parou para pensar no assunto? Alguma vez refletiu se os seus pensamentos, ideias e sentimentos estão em harmonia?</Text>
         </View>
         
         <View style={styles.sectionRow}>
-          <Image source={require('./assets/Ellipse 4.png')} style={styles.sectionImageSmall} />
+          <Image source={require('../assets/Ellipse 4.png')} style={styles.sectionImageSmall} />
           <Text style={[styles.text, styles.centerText]}>Sabe a diferença entre saúde mental e doença ou transtorno mental?</Text>
         </View>
 
         <View style={styles.sectionRow}>
-          <Image source={require('./assets/Ellipse 5.png')} style={styles.sectionImageSmall} />
+          <Image source={require('../assets/Ellipse 5.png')} style={styles.sectionImageSmall} />
           <Text style={[styles.text, styles.centerText]}>Entenda mais sobre os transtornos mentais, se conecte!</Text>
         </View>
 
         {/* Adicionando parágrafos individuais */}
         <View style={styles.section}>
-          <Image source={require('./assets/ImagemAplicativoPM 3.png')} style={styles.sectionImage} />
+          <Image source={require('../assets/ImagemAplicativoPM 3.png')} style={styles.sectionImage} />
           <Text style={styles.sectionTitle}>Transtornos Mentais</Text>
         </View>
 
@@ -56,15 +56,15 @@ const App = () => {
         <View style={styles.footer}>
           <Text style={styles.footerTitle}>Mais informações</Text>
           <View style={styles.iconRow}>
-            <Image source={require('./assets/Ellipse 8.png')} style={styles.icon} />
-            <Image source={require('./assets/Ellipse 9.png')} style={styles.icon} />
-            <Image source={require('./assets/Ellipse 10.png')} style={styles.icon} />
+            <Image source={require('../assets/Ellipse 8.png')} style={styles.icon} />
+            <Image source={require('../assets/Ellipse 9.png')} style={styles.icon} />
+            <Image source={require('../assets/Ellipse 10.png')} style={styles.icon} />
           </View>
         </View>
       </ScrollView>
 
       <TouchableOpacity style={styles.button} onPress={() => { /* ação ao pular */ }}>
-        <Text style={styles.buttonText}>Pular</Text>
+        <Text style={styles.buttonText}onPress={() => navigation.navigate('Login')}>Pular</Text>
       </TouchableOpacity>
     </View>
   );

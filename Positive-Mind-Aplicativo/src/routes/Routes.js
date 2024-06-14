@@ -146,6 +146,7 @@ import Home from '../screens/Home';
 import Motivacao from '../screens/Motivacao';
 import Index from '../screens/Index';
 import Cadastro from '../screens/Cadastro';
+import Tutorial from '../screens/Tutorial';
 
 const Stack = createStackNavigator();
 const TabBottom = createBottomTabNavigator();
@@ -154,6 +155,11 @@ const TabBottom = createBottomTabNavigator();
 function AuthStack() {
     return (
         <Stack.Navigator initialRouteName="Login">
+             <Stack.Screen
+                name="Tutorial"
+                component={Tutorial}
+                options={{ headerShown: false }}
+            />
             <Stack.Screen
                 name="Login"
                 component={Login}
