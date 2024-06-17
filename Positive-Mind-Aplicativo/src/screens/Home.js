@@ -4,7 +4,7 @@ import { StyleSheet, View, Image, TouchableOpacity, Text, Dimensions } from 'rea
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
-export default function App() {
+export default function Home({ navigation }) {
   return (
     <View style={styles.container}>
       <Image source={require('../assets/banner.png')} style={[styles.banner, { height: screenHeight * 0.2 }]} />

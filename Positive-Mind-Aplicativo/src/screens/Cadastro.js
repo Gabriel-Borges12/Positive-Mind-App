@@ -64,10 +64,10 @@ const Cadastro = ({ navigation }) => {
         />
        
         <TouchableOpacity style={styles.button} onPress={mkUser}>
-          <Text style={[styles.buttonText, { color: 'white' }]}>Cadastre-se</Text>
+          <Text style={[styles.buttonText, { color: 'white' }]} onPress={() => navigation.navigate('AlertCadastro')}>Cadastre-se</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.loginButton} onPress={handleLoginPress}>
-          <Text style={styles.loginButtonText}>Já tem conta? Faça o Login!</Text>
+          <Text style={styles.loginButtonText}onPress={() => navigation.navigate('Login')}>Já tem conta? Faça o Login!</Text>
         </TouchableOpacity>
       </Animatable.View>
       <Text style={styles.footerText}>© Positive Mind</Text>
