@@ -5,10 +5,10 @@ const ResetPasswordScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Image source={require('../src/assets/image 5 (2).png')} style={styles.logoImage} />
+        <Image source={require('../assets/image5.png')} style={styles.logoImage} />
         <Text style={styles.logoText}>Positive Mind</Text>
       </View>
-      <Image source={require('../assets/image 7.png')} style={[styles.image, styles.centeredImage]} />
+      <Image source={require('../assets/imagemMental.jpg')} style={[styles.image, styles.centeredImage]} />
       <View style={styles.formContainer}>
         <Text style={styles.title}>Redefinir senha</Text>
         <Text style={styles.subtitle}>
@@ -16,7 +16,7 @@ const ResetPasswordScreen = () => {
         </Text>
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
-            <Image source={require('../assets/mail.png')} style={styles.inputIcon} />
+            <Image source={require('../assets/email.png')} style={styles.inputIcon} />
             <TextInput 
               style={styles.input} 
               placeholder="exemplo@teste.com" 
@@ -28,7 +28,7 @@ const ResetPasswordScreen = () => {
           </TouchableOpacity>
         </View>
         <TouchableOpacity style={styles.loginLink}>
-          <Text style={styles.loginText}>Lembrou sua senha? Login</Text>
+        <Text style={styles.loginButtonText}onPress={() => navigation.navigate('Login')}>Lembrou sua senha? Faça o Login!</Text>
         </TouchableOpacity>
       </View>
     </View>

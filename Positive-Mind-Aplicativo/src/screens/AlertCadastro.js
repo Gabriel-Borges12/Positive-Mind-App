@@ -25,11 +25,12 @@ export default function App() {
     <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
       <Animated.View style={[styles.alertBox, { transform: [{ translateY: slideAnim }] }]}>
         <View style={styles.header}>
-          <Image source={require('../assets/image 5 (3).png')} style={styles.logo} />
+          <Image source={require('../assets/image5.png')} style={styles.logo} />
           <Text style={styles.companyName}>Positive Mind</Text>
         </View>
         <Text style={styles.title}>Seu cadastro foi feito com sucesso!</Text>
-        <Image source={require('../assets/image-removebg-preview (16) 1 (1).png')} style={styles.image} />
+      
+        <Image source={require('../assets/iconrelaxar.png')} style={styles.image} />
         <Text style={styles.subtitle}>Enviamos um e-mail de confirmação para</Text>
         <Text style={styles.email}>teste@email.com</Text>
       </Animated.View>
