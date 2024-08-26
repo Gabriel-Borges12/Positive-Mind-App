@@ -4,14 +4,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 
 import Login from '../screens/Login';
-import Home from '../screens/Home';
-import Motivacao from '../screens/Motivacao';
 import Index from '../screens/Index';
 import Cadastro from '../screens/Cadastro';
 import Tutorial from '../screens/Tutorial';
 import RedefinirSenha from '../screens/RedefinirSenha'; //
 import AlertCadastro from '../screens/AlertCadastro';
 import HomeTeste from '../screens/HomeTeste';
+import Profissionais from '../screens/Profissionais';
 
 const Stack = createStackNavigator();
 const TabBottom = createBottomTabNavigator();
@@ -48,6 +47,10 @@ function AuthStack() {
                 name="HomeTeste"
                 component={HomeTeste}
             />
+              <Stack.Screen
+                name="Profissionais"
+                component={Profissionais}
+            />
         </Stack.Navigator>
     );
 }
@@ -64,7 +67,7 @@ function TabBottomRoutes() {
             }}
         >
             <TabBottom.Screen
-                name="Nós"
+                name="Início"
                 component={HomeTeste}
                 options={{
                     tabBarIcon: ({ focused, color, size }) => (
@@ -79,6 +82,19 @@ function TabBottomRoutes() {
             <TabBottom.Screen
                 name="Index"
                 component={Index}
+                options={{
+                    tabBarIcon: ({ focused, color, size }) => (
+                        <Ionicons
+                            name={focused ? 'albums' : 'albums-outline'}
+                            size={size}
+                            color={color}
+                        />
+                    ),
+                }}
+            />
+             <TabBottom.Screen
+                name="Profissionais"
+                component={Profissionais}
                 options={{
                     tabBarIcon: ({ focused, color, size }) => (
                         <Ionicons

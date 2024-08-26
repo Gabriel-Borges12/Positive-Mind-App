@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Image, TouchableOpacity, Text, Dimensions, ScrollView } from 'react-native';
 import Swiper from 'react-native-swiper';
+import { getAuth } from 'firebase/auth'; // Importa o Firebase Auth
+import { getFirestore, doc, getDoc } from 'firebase/firestore'; // Importa Firestore
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -14,11 +16,41 @@ const frases = [
 ];
 
 export default function Home({ navigation }) {
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    const fetchUsername = async () => {
+      try {
+        const auth = getAuth(); // Inicializa o Auth
+        const user = auth.currentUser; // Obtém o usuário atual
+
+        if (user) {
+          const db = getFirestore(); // Inicializa o Firestore
+          const userDocRef = doc(db, 'users', user.uid); // Referência ao documento do usuário
+          const userDoc = await getDoc(userDocRef); // Obtém o documento
+
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setUsername(userData.name); // Define o nome do usuário no estado
+          } else {
+            console.log('Documento do usuário não encontrado!');
+          }
+        } else {
+          console.log('Nenhum usuário autenticado encontrado!');
+        }
+      } catch (error) {
+        console.error('Erro ao buscar o nome do usuário:', error);
+      }
+    };
+
+    fetchUsername();
+  }, []);
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.welcome}>Bem-vindo(a) de volta</Text>
-        <Text style={styles.username}>Gabriel</Text>
+        <Text style={styles.username}>{username}</Text>
         <Image source={require('../assets/iconp.jpg')} style={styles.profileImage} />
       </View>
 
@@ -49,7 +81,7 @@ export default function Home({ navigation }) {
         <View style={styles.rowContainer}>
           <TouchableOpacity style={styles.card}>
             <Image source={require('../assets/health.jpg')} style={styles.cardImage} />
-            <Text style={styles.cardTitle}>Gabriel Borges</Text>
+            <Text style={styles.cardTitle}>{username}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.card}>
             <Image source={require('../assets/health.jpg')} style={styles.cardImage} />

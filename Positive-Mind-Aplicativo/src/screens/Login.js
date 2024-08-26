@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from '../../firebase'; // Certifique-se de importar seu Firestore corretamente
 
 import logo from '../assets/image5.png';
 import banner from '../assets/telaInicial.png';
@@ -16,12 +18,21 @@ const LoginScreen = () => {
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
 
-  const handleLogin = () => {
-    // Simulação de validação de login
-    if (email === 'userteste@gmail.com' && password === '1234') {
-      navigation.navigate('MainTabs', { screen: 'Home' });
-    } else {
-      Alert.alert('Erro', 'Credenciais inválidas. Por favor, verifique seu e-mail e senha.');
+  const handleLogin = async () => {
+    try {
+      const q = query(collection(db, "users"), where("email", "==", email), where("senha", "==", password));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        // Login bem-sucedido
+        navigation.navigate('Home', { screen: 'Home' });
+      } else {
+        // Exibe uma mensagem de erro ao usuário
+        Alert.alert('Erro', 'Credenciais inválidas. Por favor, verifique seu e-mail e senha.');
+      }
+    } catch (error) {
+      console.error("Erro ao tentar fazer login: ", error);
+      Alert.alert('Erro', 'Ocorreu um erro ao tentar fazer login.');
     }
   };
 
@@ -75,7 +86,7 @@ const LoginScreen = () => {
             <Text style={styles.forgotPassword} onPress={() => navigation.navigate('RedefinirSenha')}>Esqueceu sua senha?</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={handleLogin}>
-            <Text style={styles.buttonText} onPress={() => navigation.navigate('Home')}>Entrar</Text>
+            <Text style={styles.buttonText}>Entrar</Text>
           </TouchableOpacity>
           <Text style={styles.orText}>ou</Text>
           <TouchableOpacity style={styles.googleButton}>
@@ -224,5 +235,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
 
 export default LoginScreen;
