@@ -30,7 +30,7 @@ export default function App() {
         </View>
         <Text style={styles.title}>Seu cadastro foi feito com sucesso!</Text>
       
-        <Image source={require('../assets/iconrelaxar.png')} style={styles.image} />
+        <Image source={require('../assets/telaInicial.png')} style={styles.image} />
         <Text style={styles.subtitle}>Enviamos um e-mail de confirmação para</Text>
         <Text style={styles.email}>teste@email.com</Text>
       </Animated.View>

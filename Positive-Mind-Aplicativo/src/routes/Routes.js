@@ -11,6 +11,7 @@ import Cadastro from '../screens/Cadastro';
 import Tutorial from '../screens/Tutorial';
 import RedefinirSenha from '../screens/RedefinirSenha'; //
 import AlertCadastro from '../screens/AlertCadastro';
+import HomeTeste from '../screens/HomeTeste';
 
 const Stack = createStackNavigator();
 const TabBottom = createBottomTabNavigator();
@@ -18,7 +19,7 @@ const TabBottom = createBottomTabNavigator();
 // Navegação para as telas de autenticação (Login e Cadastro)
 function AuthStack() {
     return (
-        <Stack.Navigator initialRouteName="Tutorial" screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
             <Stack.Screen
                 name="Tutorial"
                 component={Tutorial}
@@ -43,6 +44,10 @@ function AuthStack() {
                 name="RedefinirSenha"
                 component={RedefinirSenha}
             />
+              <Stack.Screen
+                name="HomeTeste"
+                component={HomeTeste}
+            />
         </Stack.Navigator>
     );
 }
@@ -59,25 +64,12 @@ function TabBottomRoutes() {
             }}
         >
             <TabBottom.Screen
-                name="Home"
-                component={Home}
+                name="Nós"
+                component={HomeTeste}
                 options={{
                     tabBarIcon: ({ focused, color, size }) => (
                         <Ionicons
                             name={focused ? 'home' : 'home-outline'}
-                            size={size}
-                            color={color}
-                        />
-                    ),
-                }}
-            />
-            <TabBottom.Screen
-                name="Motivacao"
-                component={Motivacao}
-                options={{
-                    tabBarIcon: ({ focused, color, size }) => (
-                        <Ionicons
-                            name={focused ? 'bonfire' : 'bonfire-outline'}
                             size={size}
                             color={color}
                         />
