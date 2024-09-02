@@ -95,13 +95,7 @@ const App = () => {
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
             />
-            <View style={styles.bottomNav}>
-                <Ionicons name="home-outline" size={24} color="black" />
-                <Ionicons name="chatbubble-outline" size={24} color="black" />
-                <Ionicons name="location-outline" size={24} color="black" />
-                <Ionicons name="notifications-outline" size={24} color="black" />
-                <Ionicons name="person-outline" size={24} color="black" />
-            </View>
+           
         </View>
     );
 };

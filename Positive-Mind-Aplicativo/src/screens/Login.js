@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import * as Animatable from 'react-native-animatable';
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from '../../firebase'; // Certifique-se de importar seu Firestore corretamente
 
@@ -17,6 +16,33 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
+
+  // Animations with React Native Animated API
+  const logoAnimation = new Animated.Value(0);
+  const bannerAnimation = new Animated.Value(0);
+  const bottomContainerAnimation = new Animated.Value(0);
+
+  React.useEffect(() => {
+    Animated.timing(logoAnimation, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+
+    Animated.timing(bannerAnimation, {
+      toValue: 1,
+      duration: 1000,
+      delay: 300,
+      useNativeDriver: true,
+    }).start();
+
+    Animated.timing(bottomContainerAnimation, {
+      toValue: 1,
+      duration: 1000,
+      delay: 600,
+      useNativeDriver: true,
+    }).start();
+  }, []);
 
   const handleLogin = async () => {
     try {
@@ -38,21 +64,18 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.logoContainer}>
-        <Animatable.Image  
-          animation="flipInY"
-          source={logo} 
-          style={styles.logo} />
-        <Animatable.Text  
-          animation="flipInY" 
-          style={styles.logoText}>Positive Mind</Animatable.Text>
-      </View>
-      <Animatable.Image  
-        animation="flipInY"
-        source={banner} 
-        style={styles.banner} />
+      <Animated.View style={[styles.logoContainer, { opacity: logoAnimation }]}>
+        <Image source={logo} style={styles.logo} />
+        <Text style={styles.logoText}>Positive Mind</Text>
+      </Animated.View>
+      <Animated.Image
+        source={banner}
+        style={[styles.banner, { opacity: bannerAnimation }]}
+      />
 
-      <Animatable.View delay={600} animation="fadeInUp" style={styles.bottomContainer}>
+      <Animated.View
+        style={[styles.bottomContainer, { opacity: bottomContainerAnimation }]}
+      >
         <View style={styles.whiteContainer}>
           <View style={[styles.inputContainer, emailFocused && styles.inputContainerFocused]}>
             <Text style={styles.inputLabel}>E-mail</Text>
@@ -97,7 +120,7 @@ const LoginScreen = () => {
             É novo por aqui? <Text style={styles.signupLink} onPress={() => navigation.navigate('Cadastro')}>Cadastre-se</Text>
           </Text>
         </View>
-      </Animatable.View>
+      </Animated.View>
     </View>
   );
 };
@@ -115,7 +138,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    paddingTop: 20, // Espaçamento para acomodar a logo
+    paddingTop: 20,
   },
   logo: {
     width: 40,
@@ -130,9 +153,9 @@ const styles = StyleSheet.create({
   },
   banner: {
     width: '100%',
-    height: 200, // Altura reduzida para mover a imagem para cima
+    height: 200,
     resizeMode: 'contain',
-    marginTop: 60, // Movido para cima
+    marginTop: 60,
   },
   bottomContainer: {
     position: 'absolute',
@@ -158,7 +181,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   inputContainerFocused: {
-    borderColor: '#25724D', // Cor quando o input está focado
+    borderColor: '#25724D',
   },
   inputLabel: {
     alignSelf: 'flex-start',
@@ -187,7 +210,7 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     alignSelf: 'flex-end',
-    color: '#71BE99', 
+    color: '#71BE99',
     marginBottom: 10,
   },
   button: {
@@ -231,10 +254,9 @@ const styles = StyleSheet.create({
     color: '#555',
   },
   signupLink: {
-    color: '#71BE99', 
+    color: '#71BE99',
     fontWeight: 'bold',
   },
 });
-
 
 export default LoginScreen;

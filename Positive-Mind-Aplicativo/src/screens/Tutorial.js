@@ -6,18 +6,19 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const App = () => {
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        <View style={styles.header}>
+              <View style={styles.header}>
           <Image source={require('../assets/mental 1.png')} style={styles.headerImage} />
           <View style={styles.overlay} />
           <Text style={styles.title}>Como está sua saúde mental?</Text>
         </View>
-        
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+
+
         <View style={styles.section}>
           <Image source={require('../assets/Ellipse 3.png')} style={styles.sectionImage} />
           <Text style={[styles.text, styles.centerText]}>Já parou para pensar no assunto? Alguma vez refletiu se os seus pensamentos, ideias e sentimentos estão em harmonia?</Text>
         </View>
-        
+
         <View style={styles.sectionRow}>
           <Image source={require('../assets/Ellipse 4.png')} style={styles.sectionImageSmall} />
           <Text style={[styles.text, styles.centerText]}>Sabe a diferença entre saúde mental e doença ou transtorno mental?</Text>
@@ -64,7 +65,7 @@ const App = () => {
       </ScrollView>
 
       <TouchableOpacity style={styles.button} onPress={() => { /* ação ao pular */ }}>
-        <Text style={styles.buttonText}onPress={() => navigation.navigate('Login')}>Pular</Text>
+        <Text style={styles.buttonText} onPress={() => navigation.navigate('Login')}>Pular</Text>
       </TouchableOpacity>
     </View>
   );
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#e0f7fa',
   },
   scrollViewContent: {
-    paddingBottom: 100, 
+    paddingBottom: 120, 
   },
   header: {
     position: 'relative',

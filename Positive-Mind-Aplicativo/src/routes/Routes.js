@@ -9,7 +9,7 @@ import Cadastro from '../screens/Cadastro';
 import Tutorial from '../screens/Tutorial';
 import RedefinirSenha from '../screens/RedefinirSenha'; //
 import AlertCadastro from '../screens/AlertCadastro';
-import HomeTeste from '../screens/HomeTeste';
+import HomeTeste from '../screens/Home';
 import Profissionais from '../screens/Profissionais';
 
 const Stack = createStackNavigator();
