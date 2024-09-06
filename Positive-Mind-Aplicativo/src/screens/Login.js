@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert, Animated } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from '../../firebase'; // Certifique-se de importar seu Firestore corretamente
@@ -16,33 +16,6 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
-
-  // Animations with React Native Animated API
-  const logoAnimation = new Animated.Value(0);
-  const bannerAnimation = new Animated.Value(0);
-  const bottomContainerAnimation = new Animated.Value(0);
-
-  React.useEffect(() => {
-    Animated.timing(logoAnimation, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start();
-
-    Animated.timing(bannerAnimation, {
-      toValue: 1,
-      duration: 1000,
-      delay: 300,
-      useNativeDriver: true,
-    }).start();
-
-    Animated.timing(bottomContainerAnimation, {
-      toValue: 1,
-      duration: 1000,
-      delay: 600,
-      useNativeDriver: true,
-    }).start();
-  }, []);
 
   const handleLogin = async () => {
     try {
@@ -64,18 +37,13 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Animated.View style={[styles.logoContainer, { opacity: logoAnimation }]}>
+      <View style={styles.logoContainer}>
         <Image source={logo} style={styles.logo} />
         <Text style={styles.logoText}>Positive Mind</Text>
-      </Animated.View>
-      <Animated.Image
-        source={banner}
-        style={[styles.banner, { opacity: bannerAnimation }]}
-      />
+      </View>
+      <Image source={banner} style={styles.banner} />
 
-      <Animated.View
-        style={[styles.bottomContainer, { opacity: bottomContainerAnimation }]}
-      >
+      <View style={styles.bottomContainer}>
         <View style={styles.whiteContainer}>
           <View style={[styles.inputContainer, emailFocused && styles.inputContainerFocused]}>
             <Text style={styles.inputLabel}>E-mail</Text>
@@ -120,7 +88,7 @@ const LoginScreen = () => {
             É novo por aqui? <Text style={styles.signupLink} onPress={() => navigation.navigate('Cadastro')}>Cadastre-se</Text>
           </Text>
         </View>
-      </Animated.View>
+      </View>
     </View>
   );
 };

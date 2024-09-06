@@ -11,6 +11,7 @@ import RedefinirSenha from '../screens/RedefinirSenha'; //
 import AlertCadastro from '../screens/AlertCadastro';
 import HomeTeste from '../screens/Home';
 import Profissionais from '../screens/Profissionais';
+import SplashScreen from '../screens/SplashScreen';
 
 const Stack = createStackNavigator();
 const TabBottom = createBottomTabNavigator();
@@ -18,7 +19,14 @@ const TabBottom = createBottomTabNavigator();
 // Navegação para as telas de autenticação (Login e Cadastro)
 function AuthStack() {
     return (
-        <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName="SplashScreen" screenOptions={{ headerShown: false }}>
+            <Stack.Screen
+                name="Splash"
+                component={SplashScreen}
+                options={{
+                    headerShown: false
+                }}
+            />
             <Stack.Screen
                 name="Tutorial"
                 component={Tutorial}
