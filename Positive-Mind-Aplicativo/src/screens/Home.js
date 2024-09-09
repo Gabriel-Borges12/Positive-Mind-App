@@ -3,6 +3,7 @@ import { StyleSheet, View, Image, TouchableOpacity, Text, Dimensions, ScrollView
 import Swiper from 'react-native-swiper';
 import { getAuth, signOut } from 'firebase/auth';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { firebaseApp } from '../../firebase.js'; // Importa o Firebase e Auth
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -22,16 +23,31 @@ export default function Home({ navigation }) {
     const fetchUsername = async () => {
       try {
         const auth = getAuth();
+        const uid = firebase.auth().currentUser.uid;
         const user = auth.currentUser;
-
+        console.log(user.displayName);
         if (user) {
-          const db = getFirestore();
-          const userDocRef = doc(db, 'users', user.uid);
+          const db = getFirestore(firebaseApp);
+          // const userDocRef = doc(db, 'users', user.uid);   
+          const userDocRef = db.collection('users').where('users', "==", uid)
+          // userDocRef.get().then((querySnapshot) => {
+          //   const list = [];
+          //   querySnapshot.forEach(doc => {
+          //     const { text, done } = doc.data();
+          //     list.push({
+          //       id: doc.id,
+          //       text,
+          //       done,
+          //     });
+          //   });
+          //   setTodos(list);
+          // })
+
           const userDoc = await getDoc(userDocRef);
 
           if (userDoc.exists()) {
             const userData = userDoc.data();
-            setUsername(userData.name || 'Usuário');
+            setUsername(userData.nome || 'Usuário');
           } else {
             console.log('Documento do usuário não encontrado!');
           }
@@ -64,10 +80,10 @@ export default function Home({ navigation }) {
           <Text style={styles.welcome}>Bem-vindo(a) de volta</Text>
           <Text style={styles.username}>{username}</Text>
         </View>
-        <Image source={require('../assets/iconp.jpg')} style={styles.profileImage} />
-        <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+        {/* <Image source={require('../assets/iconp.jpg')} style={styles.profileImage} /> */}
+        {/* <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
           <Text style={styles.logoutButtonText}>Logout</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>

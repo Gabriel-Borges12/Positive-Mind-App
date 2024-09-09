@@ -6,30 +6,34 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const App = () => {
   return (
     <View style={styles.container}>
-              <View style={styles.header}>
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        <View style={styles.header}>
           <Image source={require('../assets/mental 1.png')} style={styles.headerImage} />
           <View style={styles.overlay} />
           <Text style={styles.title}>Como está sua saúde mental?</Text>
         </View>
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
-
 
         <View style={styles.section}>
           <Image source={require('../assets/Ellipse 3.png')} style={styles.sectionImage} />
-          <Text style={[styles.text, styles.centerText]}>Já parou para pensar no assunto? Alguma vez refletiu se os seus pensamentos, ideias e sentimentos estão em harmonia?</Text>
+          <Text style={[styles.text, styles.centerText]}>
+            Já parou para pensar no assunto? Alguma vez refletiu se os seus pensamentos, ideias e sentimentos estão em harmonia?
+          </Text>
         </View>
 
         <View style={styles.sectionRow}>
           <Image source={require('../assets/Ellipse 4.png')} style={styles.sectionImageSmall} />
-          <Text style={[styles.text, styles.centerText]}>Sabe a diferença entre saúde mental e doença ou transtorno mental?</Text>
+          <Text style={[styles.text, styles.centerText]}>
+            Sabe a diferença entre saúde mental e doença ou transtorno mental?
+          </Text>
         </View>
 
         <View style={styles.sectionRow}>
           <Image source={require('../assets/Ellipse 5.png')} style={styles.sectionImageSmall} />
-          <Text style={[styles.text, styles.centerText]}>Entenda mais sobre os transtornos mentais, se conecte!</Text>
+          <Text style={[styles.text, styles.centerText]}>
+            Entenda mais sobre os transtornos mentais, se conecte!
+          </Text>
         </View>
 
-        {/* Adicionando parágrafos individuais */}
         <View style={styles.section}>
           <Image source={require('../assets/ImagemAplicativoPM 3.png')} style={styles.sectionImage} />
           <Text style={styles.sectionTitle}>Transtornos Mentais</Text>
@@ -52,7 +56,6 @@ const App = () => {
             Estresse, genética, nutrição, infecções e exposição a perigos ambientais são fatores que contribuem para os transtornos mentais.
           </Text>
         </View>
-        {/* Fim da adição de parágrafos individuais */}
 
         <View style={styles.footer}>
           <Text style={styles.footerTitle}>Mais informações</Text>
@@ -65,7 +68,7 @@ const App = () => {
       </ScrollView>
 
       <TouchableOpacity style={styles.button} onPress={() => { /* ação ao pular */ }}>
-        <Text style={styles.buttonText} onPress={() => navigation.navigate('Login')}>Pular</Text>
+        <Text style={styles.buttonText}>Pular</Text>
       </TouchableOpacity>
     </View>
   );
@@ -77,24 +80,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#e0f7fa',
   },
   scrollViewContent: {
-    paddingBottom: 120, 
+    paddingBottom: 150,
   },
   header: {
-    position: 'relative',
     width: screenWidth,
-    height: screenHeight * 0.4, 
+    height: screenHeight * 0.4,
+    overflow: 'hidden', // Certifica-se de que a imagem não saia do container
   },
   headerImage: {
-    position: 'absolute',
     width: '100%',
     height: '100%',
-    resizeMode: 'cover',
+    resizeMode: 'cover', // Preenche o espaço, cortando as bordas se necessário
   },
   overlay: {
     position: 'absolute',
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)', 
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
   title: {
     fontSize: 26,
@@ -162,13 +164,6 @@ const styles = StyleSheet.create({
   centerText: {
     textAlign: 'center',
   },
-  linkText: {
-    color: '#00796b',
-    fontWeight: 'bold',
-  },
-  paragraphContainer: {
-    marginBottom: 10,
-  },
   footer: {
     marginVertical: 20,
     alignItems: 'center',
@@ -195,13 +190,13 @@ const styles = StyleSheet.create({
     left: 20,
     right: 20,
     backgroundColor: '#00796b',
-    padding: 10, 
+    padding: 10,
     borderRadius: 10,
     alignItems: 'center',
   },
   buttonText: {
     color: '#fff',
-    fontSize: 16, 
+    fontSize: 16,
     fontWeight: 'bold',
   },
 });

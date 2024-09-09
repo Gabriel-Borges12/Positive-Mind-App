@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from '../../firebase'; // Certifique-se de importar seu Firestore corretamente
+import { signInWithEmailAndPassword } from 'firebase/auth'; // Importa o Firebase Auth
+import { auth } from '../../firebase'; // Importa o Auth do firebase.js
 
 import logo from '../assets/image5.png';
 import banner from '../assets/telaInicial.png';
@@ -19,19 +19,28 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      const q = query(collection(db, "users"), where("email", "==", email), where("senha", "==", password));
-      const querySnapshot = await getDocs(q);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-      if (!querySnapshot.empty) {
+      if (user) {
         // Login bem-sucedido
         navigation.navigate('Home', { screen: 'Home' });
-      } else {
-        // Exibe uma mensagem de erro ao usuário
-        Alert.alert('Erro', 'Credenciais inválidas. Por favor, verifique seu e-mail e senha.');
       }
     } catch (error) {
       console.error("Erro ao tentar fazer login: ", error);
-      Alert.alert('Erro', 'Ocorreu um erro ao tentar fazer login.');
+      let errorMessage = '';
+      switch (error.code) {
+        case 'auth/invalid-email':
+          errorMessage = 'E-mail inválido.';
+          break;
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+          errorMessage = 'E-mail ou senha incorretos.';
+          break;
+        default:
+          errorMessage = 'Ocorreu um erro ao tentar fazer login.';
+      }
+      Alert.alert('Erro', errorMessage);
     }
   };
 

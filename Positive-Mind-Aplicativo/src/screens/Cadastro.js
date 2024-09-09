@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { getFirestore, getDocs, collection, addDoc } from 'firebase/firestore';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import { firebaseApp } from '../../firebase.js';
+import { firebaseApp, auth } from '../../firebase.js'; 
+import { createUserWithEmailAndPassword } from 'firebase/auth'; 
 
 const Cadastro = ({ navigation }) => {
   const [nome, setNome] = useState('');
@@ -13,20 +14,40 @@ const Cadastro = ({ navigation }) => {
   const db = getFirestore(firebaseApp);
   const userCollectionRef = collection(db, 'users');
 
+
   async function mkUser() {
     try {
+
+      const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+      const user = userCredential.user;
+
+  
       await addDoc(userCollectionRef, {
         nome,
         email,
-        senha,
+        uid: user.uid, 
       });
 
-      // Navega para a tela de alerta após o cadastro bem-sucedido
+
       navigation.navigate('AlertCadastro');
     } catch (error) {
       console.error('Erro ao cadastrar usuário:', error);
-      // Exibe uma mensagem de erro ao usuário se o cadastro falhar
-      Alert.alert('Erro', 'Não foi possível realizar o cadastro. Tente novamente.');
+      let errorMessage = '';
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          errorMessage = 'Este e-mail já está em uso.';
+          break;
+        case 'auth/invalid-email':
+          errorMessage = 'E-mail inválido.';
+          break;
+        case 'auth/weak-password':
+          errorMessage = 'A senha deve ter no mínimo 6 caracteres.';
+          break;
+        default:
+          errorMessage = 'Erro ao tentar cadastrar. Tente novamente.';
+      }
+
+      Alert.alert('Erro', errorMessage);
     }
   }
 

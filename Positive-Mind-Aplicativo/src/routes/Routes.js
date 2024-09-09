@@ -12,6 +12,8 @@ import AlertCadastro from '../screens/AlertCadastro';
 import HomeTeste from '../screens/Home';
 import Profissionais from '../screens/Profissionais';
 import SplashScreen from '../screens/SplashScreen';
+import DiarioEmocional from '../screens/DiarioEmocional';
+import AdicionarSituacao from '../screens/AdicionarSituacao';
 
 const Stack = createStackNavigator();
 const TabBottom = createBottomTabNavigator();
@@ -58,6 +60,14 @@ function AuthStack() {
               <Stack.Screen
                 name="Profissionais"
                 component={Profissionais}
+            />
+             <Stack.Screen
+                name="Diario Emocional"
+                component={DiarioEmocional}
+            />
+             <Stack.Screen
+                name="Adicionar Situacao"
+                component={AdicionarSituacao}
             />
         </Stack.Navigator>
     );
@@ -113,6 +123,34 @@ function TabBottomRoutes() {
                     ),
                 }}
             />
+              <TabBottom.Screen
+                name="DiarioEmocional"
+                component={DiarioEmocional}
+                options={{
+                    tabBarIcon: ({ focused, color, size }) => (
+                        <Ionicons
+                            name={focused ? 'albums' : 'albums-outline'}
+                            size={size}
+                            color={color}
+                        />
+                    ),
+                }}
+            />
+            <TabBottom.Screen
+                name="AdicionarSituacao"
+                component={AdicionarSituacao}
+                options={{
+                    tabBarIcon: ({ focused, color, size }) => (
+                        <Ionicons
+                            name={focused ? 'albums' : 'albums-outline'}
+                            size={size}
+                            color={color}
+                        />
+                    ),
+                }}
+            />
+            
+
         </TabBottom.Navigator>
     );
 }
