@@ -116,7 +116,7 @@ function TabBottomRoutes() {
                 options={{
                     tabBarIcon: ({ focused, color, size }) => (
                         <Ionicons
-                            name={focused ? 'albums' : 'albums-outline'}
+                            name={focused ? 'person' : 'person-outline'}
                             size={size}
                             color={color}
                         />
@@ -129,7 +129,7 @@ function TabBottomRoutes() {
                 options={{
                     tabBarIcon: ({ focused, color, size }) => (
                         <Ionicons
-                            name={focused ? 'albums' : 'albums-outline'}
+                            name={focused ? 'book' : 'book-outline'}
                             size={size}
                             color={color}
                         />
@@ -142,7 +142,7 @@ function TabBottomRoutes() {
                 options={{
                     tabBarIcon: ({ focused, color, size }) => (
                         <Ionicons
-                            name={focused ? 'albums' : 'albums-outline'}
+                            name={focused ? 'add' : 'add'}
                             size={size}
                             color={color}
                         />
