@@ -3,7 +3,7 @@ import { ScrollView, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-const App = () => {
+const App = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -28,7 +28,6 @@ const App = () => {
           <Text style={[styles.text, styles.centerText]}>Entenda mais sobre os transtornos mentais, se conecte!</Text>
         </View>
 
-        {/* Adicionando parágrafos individuais */}
         <View style={styles.section}>
           <Image source={require('../assets/ImagemAplicativoPM 3.png')} style={styles.sectionImage} />
           <Text style={styles.sectionTitle}>Transtornos Mentais</Text>
@@ -51,7 +50,6 @@ const App = () => {
             Estresse, genética, nutrição, infecções e exposição a perigos ambientais são fatores que contribuem para os transtornos mentais.
           </Text>
         </View>
-        {/* Fim da adição de parágrafos individuais */}
 
         <View style={styles.footer}>
           <Text style={styles.footerTitle}>Mais informações</Text>
@@ -63,8 +61,8 @@ const App = () => {
         </View>
       </ScrollView>
 
-      <TouchableOpacity style={styles.button} onPress={() => { /* ação ao pular */ }}>
-        <Text style={styles.buttonText}onPress={() => navigation.navigate('Login')}>Pular</Text>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.buttonText}>Pular</Text>
       </TouchableOpacity>
     </View>
   );
@@ -76,7 +74,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#e0f7fa',
   },
   scrollViewContent: {
-    paddingBottom: 100, 
+    paddingVertical: 20,
   },
   header: {
     position: 'relative',
