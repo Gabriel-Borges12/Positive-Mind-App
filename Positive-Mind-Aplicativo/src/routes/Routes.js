@@ -97,7 +97,7 @@ function TabBottomRoutes() {
                     ),
                 }}
             />
-            <TabBottom.Screen
+            {/* <TabBottom.Screen
                 name="Index"
                 component={Index}
                 options={{
@@ -109,7 +109,7 @@ function TabBottomRoutes() {
                         />
                     ),
                 }}
-            />
+            /> */}
              <TabBottom.Screen
                 name="Profissionais"
                 component={Profissionais}
