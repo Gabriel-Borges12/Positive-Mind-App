@@ -3,7 +3,7 @@ import { ScrollView, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-const App = () => {
+const App = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -67,7 +67,7 @@ const App = () => {
         </View>
       </ScrollView>
 
-      <TouchableOpacity style={styles.button} onPress={() => { /* ação ao pular */ }}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
         <Text style={styles.buttonText}>Pular</Text>
       </TouchableOpacity>
     </View>
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#e0f7fa',
   },
   scrollViewContent: {
-    paddingBottom: 150,
+    paddingVertical: 20,
   },
   header: {
     width: screenWidth,
