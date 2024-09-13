@@ -1,28 +1,54 @@
 import React, { useEffect, useState } from 'react';
 import { getFirestore, getDocs, collection, addDoc } from 'firebase/firestore';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import { firebaseApp } from '../../firebase.js';
+import { firebaseApp, auth } from '../../firebase.js'; 
+import { createUserWithEmailAndPassword } from 'firebase/auth'; 
 
 const Cadastro = ({ navigation }) => {
-  const handleLoginPress = () => {
-    navigation.navigate('Login');
-  };
-
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
   const [users, setUsers] = useState([]);
 
   const db = getFirestore(firebaseApp);
-  const userCollectionRef = collection(db, "users");
+  const userCollectionRef = collection(db, 'users');
+
 
   async function mkUser() {
-    const user = await addDoc(userCollectionRef, {
-      nome,
-      email,
-      senha,
-    });
+    try {
+
+      const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+      const user = userCredential.user;
+
+  
+      await addDoc(userCollectionRef, {
+        nome,
+        email,
+        uid: user.uid, 
+      });
+
+
+      navigation.navigate('AlertCadastro');
+    } catch (error) {
+      console.error('Erro ao cadastrar usuário:', error);
+      let errorMessage = '';
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          errorMessage = 'Este e-mail já está em uso.';
+          break;
+        case 'auth/invalid-email':
+          errorMessage = 'E-mail inválido.';
+          break;
+        case 'auth/weak-password':
+          errorMessage = 'A senha deve ter no mínimo 6 caracteres.';
+          break;
+        default:
+          errorMessage = 'Erro ao tentar cadastrar. Tente novamente.';
+      }
+
+      Alert.alert('Erro', errorMessage);
+    }
   }
 
   useEffect(() => {
@@ -36,7 +62,11 @@ const Cadastro = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
-        <Animatable.Image animation="flipInY" source={require('../assets/logobrancasemfundo.png')} style={styles.logo} />
+        <Animatable.Image
+          animation="flipInY"
+          source={require('../assets/logobrancasemfundo.png')}
+          style={styles.logo}
+        />
       </View>
 
       <Animatable.View delay={600} animation="fadeInUp" style={styles.form}>
@@ -62,12 +92,12 @@ const Cadastro = ({ navigation }) => {
           value={senha}
           onChangeText={setSenha}
         />
-       
+
         <TouchableOpacity style={styles.button} onPress={mkUser}>
-          <Text style={[styles.buttonText, { color: 'white' }]} onPress={() => navigation.navigate('AlertCadastro')}>Cadastre-se</Text>
+          <Text style={[styles.buttonText, { color: 'white' }]}>Cadastre-se</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.loginButton} onPress={handleLoginPress}>
-          <Text style={styles.loginButtonText}onPress={() => navigation.navigate('Login')}>Já tem conta? Faça o Login!</Text>
+        <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.loginButtonText}>Já tem conta? Faça o Login!</Text>
         </TouchableOpacity>
       </Animatable.View>
       <Text style={styles.footerText}>© Positive Mind</Text>
@@ -105,7 +135,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 10,
     marginBottom: 20,
-    color: '#000000', // Corrigido para '#000000' para garantir visibilidade do texto
+    color: '#000000',
     borderColor: '#CCCCCC',
     borderWidth: 1,
   },
@@ -126,7 +156,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loginButtonText: {
-    color: '#FFFFFF',
+    color: '#000',
     fontSize: 14,
   },
   footerText: {

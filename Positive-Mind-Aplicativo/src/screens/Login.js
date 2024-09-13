@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import * as Animatable from 'react-native-animatable';
+import { signInWithEmailAndPassword } from 'firebase/auth'; // Importa o Firebase Auth
+import { auth } from '../../firebase'; // Importa o Auth do firebase.js
 
 import logo from '../assets/image5.png';
 import banner from '../assets/telaInicial.png';
@@ -16,32 +17,42 @@ const LoginScreen = () => {
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
 
-  const handleLogin = () => {
-    // Simulação de validação de login
-    if (email === 'userteste@gmail.com' && password === '1234') {
-      navigation.navigate('MainTabs', { screen: 'Home' });
-    } else {
-      Alert.alert('Erro', 'Credenciais inválidas. Por favor, verifique seu e-mail e senha.');
+  const handleLogin = async () => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      if (user) {
+        // Login bem-sucedido
+        navigation.navigate('Home', { screen: 'Home' });
+      }
+    } catch (error) {
+      console.error("Erro ao tentar fazer login: ", error);
+      let errorMessage = '';
+      switch (error.code) {
+        case 'auth/invalid-email':
+          errorMessage = 'E-mail inválido.';
+          break;
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+          errorMessage = 'E-mail ou senha incorretos.';
+          break;
+        default:
+          errorMessage = 'Ocorreu um erro ao tentar fazer login.';
+      }
+      Alert.alert('Erro', errorMessage);
     }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
-        <Animatable.Image  
-          animation="flipInY"
-          source={logo} 
-          style={styles.logo} />
-        <Animatable.Text  
-          animation="flipInY" 
-          style={styles.logoText}>Positive Mind</Animatable.Text>
+        <Image source={logo} style={styles.logo} />
+        <Text style={styles.logoText}>Positive Mind</Text>
       </View>
-      <Animatable.Image  
-        animation="flipInY"
-        source={banner} 
-        style={styles.banner} />
+      <Image source={banner} style={styles.banner} />
 
-      <Animatable.View delay={600} animation="fadeInUp" style={styles.bottomContainer}>
+      <View style={styles.bottomContainer}>
         <View style={styles.whiteContainer}>
           <View style={[styles.inputContainer, emailFocused && styles.inputContainerFocused]}>
             <Text style={styles.inputLabel}>E-mail</Text>
@@ -75,7 +86,7 @@ const LoginScreen = () => {
             <Text style={styles.forgotPassword} onPress={() => navigation.navigate('RedefinirSenha')}>Esqueceu sua senha?</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={handleLogin}>
-            <Text style={styles.buttonText} onPress={() => navigation.navigate('Home')}>Entrar</Text>
+            <Text style={styles.buttonText}>Entrar</Text>
           </TouchableOpacity>
           <Text style={styles.orText}>ou</Text>
           <TouchableOpacity style={styles.googleButton}>
@@ -86,7 +97,7 @@ const LoginScreen = () => {
             É novo por aqui? <Text style={styles.signupLink} onPress={() => navigation.navigate('Cadastro')}>Cadastre-se</Text>
           </Text>
         </View>
-      </Animatable.View>
+      </View>
     </View>
   );
 };
@@ -104,7 +115,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    paddingTop: 20, // Espaçamento para acomodar a logo
+    paddingTop: 20,
   },
   logo: {
     width: 40,
@@ -119,9 +130,9 @@ const styles = StyleSheet.create({
   },
   banner: {
     width: '100%',
-    height: 200, // Altura reduzida para mover a imagem para cima
+    height: 200,
     resizeMode: 'contain',
-    marginTop: 60, // Movido para cima
+    marginTop: 60,
   },
   bottomContainer: {
     position: 'absolute',
@@ -147,7 +158,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   inputContainerFocused: {
-    borderColor: '#25724D', // Cor quando o input está focado
+    borderColor: '#25724D',
   },
   inputLabel: {
     alignSelf: 'flex-start',
@@ -176,7 +187,7 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     alignSelf: 'flex-end',
-    color: '#71BE99', 
+    color: '#71BE99',
     marginBottom: 10,
   },
   button: {
@@ -220,7 +231,7 @@ const styles = StyleSheet.create({
     color: '#555',
   },
   signupLink: {
-    color: '#71BE99', 
+    color: '#71BE99',
     fontWeight: 'bold',
   },
 });

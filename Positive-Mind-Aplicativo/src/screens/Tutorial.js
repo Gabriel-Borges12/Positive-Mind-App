@@ -12,20 +12,26 @@ const App = ({ navigation }) => {
           <View style={styles.overlay} />
           <Text style={styles.title}>Como está sua saúde mental?</Text>
         </View>
-        
+
         <View style={styles.section}>
           <Image source={require('../assets/Ellipse 3.png')} style={styles.sectionImage} />
-          <Text style={[styles.text, styles.centerText]}>Já parou para pensar no assunto? Alguma vez refletiu se os seus pensamentos, ideias e sentimentos estão em harmonia?</Text>
+          <Text style={[styles.text, styles.centerText]}>
+            Já parou para pensar no assunto? Alguma vez refletiu se os seus pensamentos, ideias e sentimentos estão em harmonia?
+          </Text>
         </View>
-        
+
         <View style={styles.sectionRow}>
           <Image source={require('../assets/Ellipse 4.png')} style={styles.sectionImageSmall} />
-          <Text style={[styles.text, styles.centerText]}>Sabe a diferença entre saúde mental e doença ou transtorno mental?</Text>
+          <Text style={[styles.text, styles.centerText]}>
+            Sabe a diferença entre saúde mental e doença ou transtorno mental?
+          </Text>
         </View>
 
         <View style={styles.sectionRow}>
           <Image source={require('../assets/Ellipse 5.png')} style={styles.sectionImageSmall} />
-          <Text style={[styles.text, styles.centerText]}>Entenda mais sobre os transtornos mentais, se conecte!</Text>
+          <Text style={[styles.text, styles.centerText]}>
+            Entenda mais sobre os transtornos mentais, se conecte!
+          </Text>
         </View>
 
         <View style={styles.section}>
@@ -77,21 +83,20 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   header: {
-    position: 'relative',
     width: screenWidth,
-    height: screenHeight * 0.4, 
+    height: screenHeight * 0.4,
+    overflow: 'hidden', // Certifica-se de que a imagem não saia do container
   },
   headerImage: {
-    position: 'absolute',
     width: '100%',
     height: '100%',
-    resizeMode: 'cover',
+    resizeMode: 'cover', // Preenche o espaço, cortando as bordas se necessário
   },
   overlay: {
     position: 'absolute',
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)', 
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
   title: {
     fontSize: 26,
@@ -159,13 +164,6 @@ const styles = StyleSheet.create({
   centerText: {
     textAlign: 'center',
   },
-  linkText: {
-    color: '#00796b',
-    fontWeight: 'bold',
-  },
-  paragraphContainer: {
-    marginBottom: 10,
-  },
   footer: {
     marginVertical: 20,
     alignItems: 'center',
@@ -192,13 +190,13 @@ const styles = StyleSheet.create({
     left: 20,
     right: 20,
     backgroundColor: '#00796b',
-    padding: 10, 
+    padding: 10,
     borderRadius: 10,
     alignItems: 'center',
   },
   buttonText: {
     color: '#fff',
-    fontSize: 16, 
+    fontSize: 16,
     fontWeight: 'bold',
   },
 });

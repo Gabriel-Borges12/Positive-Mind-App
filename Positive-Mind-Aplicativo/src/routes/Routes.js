@@ -4,14 +4,16 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 
 import Login from '../screens/Login';
-import Home from '../screens/Home';
-import Motivacao from '../screens/Motivacao';
 import Index from '../screens/Index';
 import Cadastro from '../screens/Cadastro';
 import Tutorial from '../screens/Tutorial';
 import RedefinirSenha from '../screens/RedefinirSenha'; //
 import AlertCadastro from '../screens/AlertCadastro';
-import HomeTeste from '../screens/HomeTeste';
+import HomeTeste from '../screens/Home';
+import Profissionais from '../screens/Profissionais';
+import SplashScreen from '../screens/SplashScreen';
+import DiarioEmocional from '../screens/DiarioEmocional';
+import AdicionarSituacao from '../screens/AdicionarSituacao';
 
 const Stack = createStackNavigator();
 const TabBottom = createBottomTabNavigator();
@@ -19,7 +21,14 @@ const TabBottom = createBottomTabNavigator();
 // Navegação para as telas de autenticação (Login e Cadastro)
 function AuthStack() {
     return (
-        <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName="SplashScreen" screenOptions={{ headerShown: false }}>
+            <Stack.Screen
+                name="Splash"
+                component={SplashScreen}
+                options={{
+                    headerShown: false
+                }}
+            />
             <Stack.Screen
                 name="Tutorial"
                 component={Tutorial}
@@ -48,6 +57,18 @@ function AuthStack() {
                 name="HomeTeste"
                 component={HomeTeste}
             />
+              <Stack.Screen
+                name="Profissionais"
+                component={Profissionais}
+            />
+             <Stack.Screen
+                name="Diario Emocional"
+                component={DiarioEmocional}
+            />
+             <Stack.Screen
+                name="Adicionar Situacao"
+                component={AdicionarSituacao}
+            />
         </Stack.Navigator>
     );
 }
@@ -64,7 +85,7 @@ function TabBottomRoutes() {
             }}
         >
             <TabBottom.Screen
-                name="Nós"
+                name="Início"
                 component={HomeTeste}
                 options={{
                     tabBarIcon: ({ focused, color, size }) => (
@@ -89,6 +110,47 @@ function TabBottomRoutes() {
                     ),
                 }}
             />
+             <TabBottom.Screen
+                name="Profissionais"
+                component={Profissionais}
+                options={{
+                    tabBarIcon: ({ focused, color, size }) => (
+                        <Ionicons
+                            name={focused ? 'person' : 'person-outline'}
+                            size={size}
+                            color={color}
+                        />
+                    ),
+                }}
+            />
+              <TabBottom.Screen
+                name="DiarioEmocional"
+                component={DiarioEmocional}
+                options={{
+                    tabBarIcon: ({ focused, color, size }) => (
+                        <Ionicons
+                            name={focused ? 'book' : 'book-outline'}
+                            size={size}
+                            color={color}
+                        />
+                    ),
+                }}
+            />
+            <TabBottom.Screen
+                name="AdicionarSituacao"
+                component={AdicionarSituacao}
+                options={{
+                    tabBarIcon: ({ focused, color, size }) => (
+                        <Ionicons
+                            name={focused ? 'add' : 'add'}
+                            size={size}
+                            color={color}
+                        />
+                    ),
+                }}
+            />
+            
+
         </TabBottom.Navigator>
     );
 }
