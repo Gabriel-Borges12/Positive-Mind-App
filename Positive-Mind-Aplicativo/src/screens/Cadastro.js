@@ -17,10 +17,8 @@ const Cadastro = ({ navigation }) => {
 
   async function mkUser() {
     try {
-
       const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
       const user = userCredential.user;
-
   
       await addDoc(userCollectionRef, {
         nome,
@@ -28,8 +26,7 @@ const Cadastro = ({ navigation }) => {
         uid: user.uid, 
       });
 
-
-      navigation.navigate('AlertCadastro');
+      navigation.navigate('AlertCadastro', { userEmail: email });
     } catch (error) {
       console.error('Erro ao cadastrar usuário:', error);
       let errorMessage = '';
@@ -49,6 +46,7 @@ const Cadastro = ({ navigation }) => {
 
       Alert.alert('Erro', errorMessage);
     }
+    return (email);
   }
 
   useEffect(() => {
