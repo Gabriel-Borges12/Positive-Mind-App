@@ -18,6 +18,7 @@ import Perfil from '../screens/Perfil';
 import PassoAPasso from '../screens/PassoAPasso'; 
 import Feedback from '../screens/Feedback';
 
+
 const Stack = createStackNavigator();
 const TabBottom = createBottomTabNavigator();
 
