@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Image, TouchableOpacity, Text, Dimensions, ScrollView } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { getAuth, signOut } from 'firebase/auth';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
-import { firebaseApp } from '../../firebase.js'; // Importa o Firebase e Auth
+import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import firebase from '../../firebase.js'; // Importa o Firebase e Auth
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -23,30 +23,20 @@ export default function Home({ navigation }) {
     const fetchUsername = async () => {
       try {
         const auth = getAuth();
-        const uid = firebase.auth().currentUser.uid;
         const user = auth.currentUser;
-        console.log(user.displayName);
+
         if (user) {
-          const db = getFirestore(firebaseApp);
-          // const userDocRef = doc(db, 'users', user.uid);   
-          const userDocRef = db.collection('users').where('users', "==", uid)
-          // userDocRef.get().then((querySnapshot) => {
-          //   const list = [];
-          //   querySnapshot.forEach(doc => {
-          //     const { text, done } = doc.data();
-          //     list.push({
-          //       id: doc.id,
-          //       text,
-          //       done,
-          //     });
-          //   });
-          //   setTodos(list);
-          // })
+          const db = getFirestore(firebase);
+          const email = user.email;
 
-          const userDoc = await getDoc(userDocRef);
+          // Cria uma query para buscar o documento do usuário pelo email
+          const usersCollection = collection(db, 'users');
+          const q = query(usersCollection, where('email', '==', email));
+          const querySnapshot = await getDocs(q);
 
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
+          if (!querySnapshot.empty) {
+            // Obtém o primeiro documento encontrado (se houver)
+            const userData = querySnapshot.docs[0].data();
             setUsername(userData.nome || 'Usuário');
           } else {
             console.log('Documento do usuário não encontrado!');
@@ -80,10 +70,10 @@ export default function Home({ navigation }) {
           <Text style={styles.welcome}>Bem-vindo(a) de volta</Text>
           <Text style={styles.username}>{username}</Text>
         </View>
-        {/* <Image source={require('../assets/iconp.jpg')} style={styles.profileImage} /> */}
-        {/* <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+        <Image source={require('../assets/iconp.jpg')} style={styles.profileImage} /> 
+        <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
           <Text style={styles.logoutButtonText}>Logout</Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
