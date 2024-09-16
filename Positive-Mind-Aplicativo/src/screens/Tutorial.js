@@ -85,12 +85,12 @@ const styles = StyleSheet.create({
   header: {
     width: screenWidth,
     height: screenHeight * 0.4,
-    overflow: 'hidden',
+    overflow: 'hidden', // Certifica-se de que a imagem não saia do container
   },
   headerImage: {
     width: '100%',
     height: '100%',
-    resizeMode: 'cover',
+    resizeMode: 'cover', // Preenche o espaço, cortando as bordas se necessário
   },
   overlay: {
     position: 'absolute',

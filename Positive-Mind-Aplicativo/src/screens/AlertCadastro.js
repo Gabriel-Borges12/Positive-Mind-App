@@ -1,13 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { View, Text, StyleSheet, Animated, TouchableOpacity, Easing, Image } from 'react-native';
 
-export default function App({ route }) {
+export default function App() {
   const slideAnim = useRef(new Animated.Value(0)).current;
   const fadeAnim = useRef(new Animated.Value(1)).current; 
-  
-  // Substituindo com um estado de exemplo. Se o e-mail do usuário for obtido de outro lugar, você pode passar como prop.
-  const { userEmail } = route.params;
-  
+
   const startAnimation = () => {
     Animated.parallel([
       Animated.timing(slideAnim, {
@@ -35,11 +32,8 @@ export default function App({ route }) {
       
         <Image source={require('../assets/telaInicial.png')} style={styles.image} />
         <Text style={styles.subtitle}>Enviamos um e-mail de confirmação para</Text>
-        
-        {/* Mostrar o e-mail do usuário */}
-        <Text style={styles.email}>{userEmail}</Text>
+        <Text style={styles.email}>teste@email.com</Text>
       </Animated.View>
-      
       <Animated.View style={[styles.buttonContainer, { opacity: fadeAnim }]}>
         <TouchableOpacity style={styles.button} onPress={startAnimation}>
           <Text style={styles.arrow} onPress={() => navigation.navigate('Login')}>↑</Text>
