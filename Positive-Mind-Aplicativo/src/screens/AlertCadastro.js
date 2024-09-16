@@ -34,7 +34,7 @@ export default function App({ route }) {
         <Text style={styles.title}>Seu cadastro foi feito com sucesso!</Text>
       
         <Image source={require('../assets/telaInicial.png')} style={styles.image} />
-        <Text style={styles.subtitle}>Enviamos um e-mail de confirmação para</Text>
+        <Text style={styles.subtitle}>Obrigado por fazer parte da nossa história.</Text>
         
         {/* Mostrar o e-mail do usuário */}
         <Text style={styles.email}>{userEmail}</Text>

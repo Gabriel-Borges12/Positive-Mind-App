@@ -14,7 +14,9 @@ import Profissionais from '../screens/Profissionais';
 import SplashScreen from '../screens/SplashScreen';
 import DiarioEmocional from '../screens/DiarioEmocional';
 import AdicionarSituacao from '../screens/AdicionarSituacao';
-import Perfil from '../screens/Perfil';  // Importação da tela de perfil
+import Perfil from '../screens/Perfil';  
+import PassoAPasso from '../screens/PassoAPasso'; 
+import Feedback from '../screens/Feedback';
 
 const Stack = createStackNavigator();
 const TabBottom = createBottomTabNavigator();
@@ -63,12 +65,20 @@ function AuthStack() {
                 component={Profissionais}
             />
              <Stack.Screen
-                name="Diario Emocional"
+                name="Diário"
                 component={DiarioEmocional}
             />
              <Stack.Screen
-                name="Adicionar Situacao"
+                name="Situação"
                 component={AdicionarSituacao}
+            />
+             <Stack.Screen
+                name="PassoAPasso"
+                component={PassoAPasso}
+            />
+            <Stack.Screen
+                name="Feedback"
+                component={Feedback}
             />
         </Stack.Navigator>
     );
@@ -125,7 +135,7 @@ function TabBottomRoutes() {
                 }}
             />
             <TabBottom.Screen
-                name="DiarioEmocional"
+                name="Diário"
                 component={DiarioEmocional}
                 options={{
                     tabBarIcon: ({ focused, color, size }) => (
@@ -138,7 +148,7 @@ function TabBottomRoutes() {
                 }}
             />
             <TabBottom.Screen
-                name="AdicionarSituacao"
+                name="Situação"
                 component={AdicionarSituacao}
                 options={{
                     tabBarIcon: ({ focused, color, size }) => (
@@ -150,6 +160,19 @@ function TabBottomRoutes() {
                     ),
                 }}
             />
+            {/* <TabBottom.Screen
+                name="Feedback"
+                component={Feedback}
+                options={{
+                    tabBarIcon: ({ focused, color, size }) => (
+                        <Ionicons
+                            name={focused ? 'person' : 'person-outline'}
+                            size={size}
+                            color={color}
+                        />
+                    ),
+                }}
+            /> */}
             {/* Nova tela de perfil adicionada aqui */}
             <TabBottom.Screen
                 name="Perfil"

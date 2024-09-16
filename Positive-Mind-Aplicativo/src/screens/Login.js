@@ -24,7 +24,7 @@ const LoginScreen = () => {
 
       if (user) {
         // Login bem-sucedido
-        navigation.navigate('Home', { screen: 'Home' });
+        navigation.navigate('PassoAPasso', { screen: 'PassoAPasso' });
       }
     } catch (error) {
       console.error("Erro ao tentar fazer login: ", error);

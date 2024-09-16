@@ -1,54 +1,112 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, Animated, Modal, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import axios from 'axios';
 
 const professionalsData = [
-    { id: '1', name: 'Gabriel Borges', rating: 5, city: 'São Paulo' },
-    { id: '2', name: 'Mariane Letícia', rating: 4.5, city: 'Rio de Janeiro' },
-    { id: '3', name: 'Leonardo Lopes', rating: 5, city: 'Belo Horizonte' },
-    { id: '4', name: 'Luis Augusto', rating: 4.5, city: 'Curitiba' },
+    { 
+        id: '1', 
+        name: 'Gabriel Borges', 
+        rating: 5, 
+        city: 'São Paulo', 
+        image: '../assets/productoOwnerBorges.jpeg',
+        phone: '(11) 98765-4321',
+        age: 34,
+        address: 'Av. Paulista, 1000',
+        workingHours: 'Seg - Sex: 9h - 18h'
+    },
+    { 
+        id: '2', 
+        name: 'Mariane Letícia', 
+        rating: 4.5, 
+        city: 'Rio de Janeiro', 
+        image: '../assets/desenvolvedoraMariane.jpg',
+        phone: '(21) 91234-5678',
+        age: 29,
+        address: 'Rua da Glória, 500',
+        workingHours: 'Seg - Sáb: 10h - 17h'
+    },
+    { 
+        id: '3', 
+        name: 'Leonardo Lopes', 
+        rating: 5, 
+        city: 'Belo Horizonte', 
+        image: '../assets/desenvolvedorLeonardo.jpg',
+        phone: '(31) 92345-6789',
+        age: 40,
+        address: 'Av. Afonso Pena, 1200',
+        workingHours: 'Seg - Qui: 8h - 16h'
+    },
+    { 
+        id: '4', 
+        name: 'Luis Augusto', 
+        rating: 4.5, 
+        city: 'Curitiba', 
+        image: '../assets/desenvolvedorLuis.jpg',
+        phone: '(41) 99876-5432',
+        age: 37,
+        address: 'Rua XV de Novembro, 800',
+        workingHours: 'Seg - Sex: 9h - 19h'
+    },
 ];
 
 const App = () => {
-    const [city, setCity] = useState('');
-    const [filteredProfessionals, setFilteredProfessionals] = useState([]);
-    const [cities, setCities] = useState([]);
+    const [searchText, setSearchText] = useState('');
+    const [filteredProfessionals, setFilteredProfessionals] = useState(professionalsData);
     const [loading, setLoading] = useState(false);
+    const [animation] = useState(new Animated.Value(1)); // Para o efeito de piscamento
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedProfessional, setSelectedProfessional] = useState(null);
+    const [userRating, setUserRating] = useState({});
 
-    const handleCitySearch = async (text) => {
-        setCity(text);
-        if (text.length > 2) {
-            setLoading(true);
-            try {
-                const response = await axios.get(`https://wft-geo-db.p.rapidapi.com/v1/geo/cities`, {
-                    params: { namePrefix: text },
-                    headers: {
-                        'X-RapidAPI-Key': 'YOUR_RAPIDAPI_KEY',
-                        'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
-                    }
-                });
-                setCities(response.data.data);
-            } catch (error) {
-                console.error(error);
-            }
-            setLoading(false);
-        } else {
-            setCities([]);
-        }
+    // Efeito de piscar a barra de pesquisa
+    useEffect(() => {
+        const blink = () => {
+            Animated.sequence([
+                Animated.timing(animation, {
+                    toValue: 0.5,
+                    duration: 500,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(animation, {
+                    toValue: 1,
+                    duration: 500,
+                    useNativeDriver: true,
+                })
+            ]).start(() => blink());
+        };
+
+        blink();
+    }, []);
+
+    const handleSearch = () => {
+        setLoading(true);
+        const filtered = professionalsData.filter(pro =>
+            pro.name.toLowerCase().includes(searchText.toLowerCase()) ||
+            pro.city.toLowerCase().includes(searchText.toLowerCase())
+        );
+        setFilteredProfessionals(filtered);
+        setLoading(false);
     };
 
-    const handleCitySelect = (selectedCity) => {
-        setCity(selectedCity);
-        const filtered = professionalsData.filter(pro => pro.city.toLowerCase() === selectedCity.toLowerCase());
-        setFilteredProfessionals(filtered);
-        setCities([]);
+    const handleProfileView = (professional) => {
+        setSelectedProfessional(professional);
+        setModalVisible(true);
+    };
+
+    const handleRating = (professionalId, rating) => {
+        setUserRating(prevRatings => ({
+            ...prevRatings,
+            [professionalId]: rating
+        }));
+        setModalVisible(false); // Fechar modal após avaliação
     };
 
     const renderItem = ({ item }) => (
         <View style={styles.card}>
-            <View style={styles.profilePic} />
-            <View>
+            <View style={styles.profilePic}>
+                <Image source={{ uri: item.image }} style={styles.image} />
+            </View>
+            <View style={styles.cardContent}>
                 <Text style={styles.name}>{item.name}</Text>
                 <View style={styles.starsContainer}>
                     {Array.from({ length: 5 }, (_, i) => (
@@ -56,11 +114,14 @@ const App = () => {
                             key={i}
                             name="star"
                             size={20}
-                            color={i < item.rating ? '#FDD835' : '#C5C5C5'}
+                            color={i < (userRating[item.id] || 0) ? '#FDD835' : '#C5C5C5'}
                         />
                     ))}
                 </View>
-                <TouchableOpacity style={styles.profileButton}>
+                <TouchableOpacity 
+                    style={styles.profileButton} 
+                    onPress={() => handleProfileView(item)}
+                >
                     <Text style={styles.profileButtonText}>Ver perfil</Text>
                 </TouchableOpacity>
             </View>
@@ -70,32 +131,72 @@ const App = () => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Encontre os melhores psicólogos da região</Text>
-            <View style={styles.searchContainer}>
+            <Animated.View style={[styles.searchContainer, { opacity: animation }]}>
                 <TextInput
                     placeholder="Onde você está?"
                     style={styles.searchInput}
-                    value={city}
-                    onChangeText={handleCitySearch}
+                    value={searchText}
+                    onChangeText={setSearchText}
                 />
-                <Ionicons name="location-outline" size={24} color="black" />
-            </View>
+                <TouchableOpacity onPress={handleSearch}>
+                    <Ionicons name="search-outline" size={24} color="black" />
+                </TouchableOpacity>
+            </Animated.View>
             {loading ? <ActivityIndicator size="large" color="#0000ff" /> : null}
-            <FlatList
-                data={cities}
-                renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => handleCitySelect(item.city)}>
-                        <Text style={styles.cityItem}>{item.city}, {item.country}</Text>
-                    </TouchableOpacity>
-                )}
-                keyExtractor={item => item.id}
-                style={styles.cityList}
-            />
             <FlatList
                 data={filteredProfessionals}
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
             />
-           
+
+            {/* Modal para exibir detalhes do psicólogo */}
+            <Modal
+                transparent={true}
+                visible={modalVisible}
+                animationType="slide"
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        {selectedProfessional && (
+                            <>
+                                <Text style={styles.modalTitle}>{selectedProfessional.name}</Text>
+                                <Image 
+                                    source={{ uri: selectedProfessional.image }} 
+                                    style={styles.modalImage} 
+                                />
+                                <Text style={styles.modalText}>Telefone: {selectedProfessional.phone}</Text>
+                                <Text style={styles.modalText}>Idade: {selectedProfessional.age} anos</Text>
+                                <Text style={styles.modalText}>Endereço: {selectedProfessional.address}</Text>
+                                <Text style={styles.modalText}>Horário de serviço: {selectedProfessional.workingHours}</Text>
+                                
+                                <Text style={styles.modalText}>Avalie este profissional:</Text>
+                                <View style={styles.starsContainer}>
+                                    {Array.from({ length: 5 }, (_, i) => (
+                                        <TouchableOpacity
+                                            key={i}
+                                            onPress={() => handleRating(selectedProfessional.id, i + 1)}
+                                        >
+                                            <Ionicons
+                                                name="star"
+                                                size={30}
+                                                color={i < (userRating[selectedProfessional.id] || 0) ? '#FDD835' : '#C5C5C5'}
+                                            />
+                                        </TouchableOpacity>
+                                    ))}
+                                </View>
+
+                                <TouchableOpacity 
+                                    style={styles.closeButton} 
+                                    onPress={() => setModalVisible(false)}
+                                >
+                                    <Text style={styles.closeButtonText}>Fechar</Text>
+                                </TouchableOpacity>
+                            </>
+                        )}
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 };
@@ -111,6 +212,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginVertical: 16,
+        color: '#333',
     },
     searchContainer: {
         flexDirection: 'row',
@@ -119,10 +221,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         alignItems: 'center',
         marginBottom: 16,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
     },
     searchInput: {
         flex: 1,
         paddingVertical: 8,
+        fontSize: 16,
     },
     card: {
         flexDirection: 'row',
@@ -131,6 +237,9 @@ const styles = StyleSheet.create({
         padding: 16,
         marginBottom: 16,
         alignItems: 'center',
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
     },
     profilePic: {
         width: 50,
@@ -138,10 +247,19 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         backgroundColor: '#C5C5C5',
         marginRight: 16,
+        overflow: 'hidden',
+    },
+    image: {
+        width: '100%',
+        height: '100%',
+    },
+    cardContent: {
+        flex: 1,
     },
     name: {
         fontSize: 16,
         fontWeight: 'bold',
+        color: '#333',
     },
     starsContainer: {
         flexDirection: 'row',
@@ -152,24 +270,51 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         paddingVertical: 4,
         paddingHorizontal: 12,
-        marginTop: 4,
+        marginTop: 8,
     },
     profileButtonText: {
+        fontSize: 14,
         color: '#FFF',
+        textAlign: 'center',
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        width: '80%',
+        padding: 20,
+        backgroundColor: '#FFF',
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    modalTitle: {
+        fontSize: 18,
         fontWeight: 'bold',
+        marginBottom: 10,
     },
-    cityItem: {
-        padding: 10,
+    modalImage: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+        marginBottom: 10,
+    },
+    modalText: {
+        fontSize: 14,
+        marginBottom: 10,
+    },
+    closeButton: {
+        marginTop: 20,
+        backgroundColor: '#A5D6A7',
+        borderRadius: 20,
+        paddingVertical: 8,
+        paddingHorizontal: 20,
+    },
+    closeButtonText: {
         fontSize: 16,
-    },
-    cityList: {
-        maxHeight: 150,
-    },
-    bottomNav: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        paddingVertical: 16,
-        backgroundColor: '#F0F0F0',
+        color: '#FFF',
     },
 });
 
