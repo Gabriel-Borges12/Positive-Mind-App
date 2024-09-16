@@ -15,6 +15,7 @@ import SplashScreen from '../screens/SplashScreen';
 import DiarioEmocional from '../screens/DiarioEmocional';
 import AdicionarSituacao from '../screens/AdicionarSituacao';
 
+
 const Stack = createStackNavigator();
 const TabBottom = createBottomTabNavigator();
 
