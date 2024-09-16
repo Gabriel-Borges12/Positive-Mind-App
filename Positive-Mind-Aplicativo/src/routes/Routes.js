@@ -7,13 +7,14 @@ import Login from '../screens/Login';
 import Index from '../screens/Index';
 import Cadastro from '../screens/Cadastro';
 import Tutorial from '../screens/Tutorial';
-import RedefinirSenha from '../screens/RedefinirSenha'; //
+import RedefinirSenha from '../screens/RedefinirSenha'; 
 import AlertCadastro from '../screens/AlertCadastro';
 import HomeTeste from '../screens/Home';
 import Profissionais from '../screens/Profissionais';
 import SplashScreen from '../screens/SplashScreen';
 import DiarioEmocional from '../screens/DiarioEmocional';
 import AdicionarSituacao from '../screens/AdicionarSituacao';
+import Perfil from '../screens/Perfil';  // Importação da tela de perfil
 
 
 const Stack = createStackNavigator();
@@ -98,7 +99,7 @@ function TabBottomRoutes() {
                     ),
                 }}
             />
-            <TabBottom.Screen
+             {/* <TabBottom.Screen
                 name="Index"
                 component={Index}
                 options={{
@@ -110,7 +111,7 @@ function TabBottomRoutes() {
                         />
                     ),
                 }}
-            />
+            /> */}
              <TabBottom.Screen
                 name="Profissionais"
                 component={Profissionais}
@@ -124,7 +125,7 @@ function TabBottomRoutes() {
                     ),
                 }}
             />
-              <TabBottom.Screen
+            <TabBottom.Screen
                 name="DiarioEmocional"
                 component={DiarioEmocional}
                 options={{
@@ -150,8 +151,20 @@ function TabBottomRoutes() {
                     ),
                 }}
             />
-            
-
+            {/* Nova tela de perfil adicionada aqui */}
+            <TabBottom.Screen
+                name="Perfil"
+                component={Perfil}
+                options={{
+                    tabBarIcon: ({ focused, color, size }) => (
+                        <Ionicons
+                            name={focused ? 'person-circle' : 'person-circle-outline'}
+                            size={size}
+                            color={color}
+                        />
+                    ),
+                }}
+            />
         </TabBottom.Navigator>
     );
 }
