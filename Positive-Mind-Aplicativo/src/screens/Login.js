@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { signInWithEmailAndPassword } from 'firebase/auth'; // Importa o Firebase Auth
-import { auth } from '../../firebase'; // Importa o Auth do firebase.js
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
+import { auth } from '../../firebase';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 
 import logo from '../assets/image5.png';
 import banner from '../assets/telaInicial.png';
@@ -17,17 +18,49 @@ const LoginScreen = () => {
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
 
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: '61713422871', // Substitua pelo seu Client ID
+    });
+  }, []);
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const { idToken } = await GoogleSignin.signIn();
+
+      const credential = GoogleAuthProvider.credential(idToken);
+      await signInWithCredential(auth, credential);
+      navigation.navigate('PassoAPasso', { screen: 'PassoAPasso' });
+    } catch (error) {
+      switch (error.code) {
+        case statusCodes.SIGN_IN_CANCELLED:
+          Alert.alert('Login Cancelado');
+          break;
+        case statusCodes.IN_PROGRESS:
+          Alert.alert('Uma operação de login já está em andamento');
+          break;
+        case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+          Alert.alert('Serviços do Google Play não estão disponíveis');
+          break;
+        default:
+          Alert.alert('Erro ao fazer login com Google');
+      }
+    }
+  };
+
   const handleLogin = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
       if (user) {
-        // Login bem-sucedido
+        setEmail('');
+        setPassword('');
         navigation.navigate('PassoAPasso', { screen: 'PassoAPasso' });
       }
     } catch (error) {
-      console.error("Erro ao tentar fazer login: ", error);
+      console.error('Erro ao tentar fazer login: ', error);
       let errorMessage = '';
       switch (error.code) {
         case 'auth/invalid-email':
@@ -83,13 +116,15 @@ const LoginScreen = () => {
             </View>
           </View>
           <TouchableOpacity>
-            <Text style={styles.forgotPassword} onPress={() => navigation.navigate('RedefinirSenha')}>Esqueceu sua senha?</Text>
+            <Text style={styles.forgotPassword} onPress={() => navigation.navigate('RedefinirSenha')}>
+              Esqueceu sua senha?
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={handleLogin}>
             <Text style={styles.buttonText}>Entrar</Text>
           </TouchableOpacity>
           <Text style={styles.orText}>ou</Text>
-          <TouchableOpacity style={styles.googleButton}>
+          <TouchableOpacity style={styles.googleButton} onPress={handleGoogleSignIn}>
             <Image source={googleIcon} style={styles.googleIcon} />
             <Text style={styles.googleButtonText}>Entrar com o Google</Text>
           </TouchableOpacity>

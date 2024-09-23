@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, Animated, Modal, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { firestore } from '../../firebase'; // Certifique-se de que o Firebase está configurado corretamente
 
 const professionalsData = [
     { 
@@ -8,7 +9,7 @@ const professionalsData = [
         name: 'Gabriel Borges', 
         rating: 5, 
         city: 'São Paulo', 
-        image: '../assets/productoOwnerBorges.jpeg',
+        image: 'https://via.placeholder.com/100', // substitua com a imagem correta
         phone: '(11) 98765-4321',
         age: 34,
         address: 'Av. Paulista, 1000',
@@ -19,7 +20,7 @@ const professionalsData = [
         name: 'Mariane Letícia', 
         rating: 4.5, 
         city: 'Rio de Janeiro', 
-        image: '../assets/desenvolvedoraMariane.jpg',
+        image: 'https://via.placeholder.com/100', // substitua com a imagem correta
         phone: '(21) 91234-5678',
         age: 29,
         address: 'Rua da Glória, 500',
@@ -30,7 +31,7 @@ const professionalsData = [
         name: 'Leonardo Lopes', 
         rating: 5, 
         city: 'Belo Horizonte', 
-        image: '../assets/desenvolvedorLeonardo.jpg',
+        image: 'https://via.placeholder.com/100', // substitua com a imagem correta
         phone: '(31) 92345-6789',
         age: 40,
         address: 'Av. Afonso Pena, 1200',
@@ -41,7 +42,7 @@ const professionalsData = [
         name: 'Luis Augusto', 
         rating: 4.5, 
         city: 'Curitiba', 
-        image: '../assets/desenvolvedorLuis.jpg',
+        image: 'https://via.placeholder.com/100', // substitua com a imagem correta
         phone: '(41) 99876-5432',
         age: 37,
         address: 'Rua XV de Novembro, 800',
@@ -57,6 +58,21 @@ const App = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedProfessional, setSelectedProfessional] = useState(null);
     const [userRating, setUserRating] = useState({});
+
+    // Função para salvar a avaliação no Firestore
+    const saveRating = async (userId, professionalId, rating) => {
+        try {
+            await firestore.collection('ratings').add({
+                userId: userId, // Substitua pelo ID do usuário logado
+                professionalId: professionalId,
+                rating: rating,
+                timestamp: new Date() // Adiciona o timestamp atual
+            });
+            console.log('Avaliação salva com sucesso!');
+        } catch (error) {
+            console.error('Erro ao salvar a avaliação: ', error);
+        }
+    };
 
     // Efeito de piscar a barra de pesquisa
     useEffect(() => {
@@ -94,10 +110,12 @@ const App = () => {
     };
 
     const handleRating = (professionalId, rating) => {
+        const userId = 'uid123'; // Substitua pelo ID do usuário logado (use autenticação)
         setUserRating(prevRatings => ({
             ...prevRatings,
             [professionalId]: rating
         }));
+        saveRating(userId, professionalId, rating); // Salva a avaliação no Firestore
         setModalVisible(false); // Fechar modal após avaliação
     };
 
@@ -235,23 +253,19 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         borderRadius: 10,
         padding: 16,
-        marginBottom: 16,
-        alignItems: 'center',
+        marginBottom: 10,
         shadowColor: '#000',
         shadowOpacity: 0.1,
         shadowRadius: 10,
+        elevation: 2,
     },
     profilePic: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        backgroundColor: '#C5C5C5',
         marginRight: 16,
-        overflow: 'hidden',
     },
     image: {
-        width: '100%',
-        height: '100%',
+        width: 80,
+        height: 80,
+        borderRadius: 40,
     },
     cardContent: {
         flex: 1,
@@ -259,35 +273,34 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 16,
         fontWeight: 'bold',
-        color: '#333',
+        marginBottom: 8,
     },
     starsContainer: {
         flexDirection: 'row',
-        marginVertical: 4,
     },
     profileButton: {
-        backgroundColor: '#A5D6A7',
+        marginTop: 10,
+        backgroundColor: '#4CAF50',
+        paddingVertical: 6,
+        paddingHorizontal: 10,
         borderRadius: 20,
-        paddingVertical: 4,
-        paddingHorizontal: 12,
-        marginTop: 8,
     },
     profileButtonText: {
-        fontSize: 14,
         color: '#FFF',
         textAlign: 'center',
+        fontSize: 14,
     },
     modalContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundColor: 'rgba(0,0,0,0.5)',
     },
     modalContent: {
-        width: '80%',
-        padding: 20,
         backgroundColor: '#FFF',
+        padding: 20,
         borderRadius: 10,
+        width: 300,
         alignItems: 'center',
     },
     modalTitle: {
@@ -302,19 +315,20 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     modalText: {
-        fontSize: 14,
-        marginBottom: 10,
+        fontSize: 16,
+        marginBottom: 6,
     },
     closeButton: {
         marginTop: 20,
-        backgroundColor: '#A5D6A7',
-        borderRadius: 20,
-        paddingVertical: 8,
+        backgroundColor: '#FF5A5F',
+        paddingVertical: 10,
         paddingHorizontal: 20,
+        borderRadius: 20,
     },
     closeButtonText: {
-        fontSize: 16,
         color: '#FFF',
+        textAlign: 'center',
+        fontSize: 16,
     },
 });
 

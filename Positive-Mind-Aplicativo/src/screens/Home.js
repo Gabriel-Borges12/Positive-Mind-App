@@ -29,13 +29,11 @@ export default function Home({ navigation }) {
           const db = getFirestore(firebase);
           const email = user.email;
 
-          // Cria uma query para buscar o documento do usuário pelo email
           const usersCollection = collection(db, 'users');
           const q = query(usersCollection, where('email', '==', email));
           const querySnapshot = await getDocs(q);
 
           if (!querySnapshot.empty) {
-            // Obtém o primeiro documento encontrado (se houver)
             const userData = querySnapshot.docs[0].data();
             setUsername(userData.nome || 'Usuário');
           } else {
@@ -67,10 +65,9 @@ export default function Home({ navigation }) {
     <View style={styles.container}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.welcome}>Bem-vindo(a) de volta</Text>
+          <Text style={styles.welcome}>Bem-vindo(a) de volta,</Text>
           <Text style={styles.username}>{username}</Text>
         </View>
-        <Image source={require('../assets/iconp.jpg')} style={styles.profileImage} /> 
         <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
           <Text style={styles.logoutButtonText}>Logout</Text>
         </TouchableOpacity>
@@ -85,8 +82,7 @@ export default function Home({ navigation }) {
             loop={true}
             autoplay={true}
             autoplayTimeout={5}
-            paginationStyle={styles.paginationStyle}
-            activeDotColor="#fff"
+            showsPagination={false} // Removendo as bolinhas de rolagem
           >
             {frases.map((frase, index) => (
               <View style={styles.slide} key={index}>
@@ -161,7 +157,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   scrollContainer: {
-    paddingBottom: 20, // Deixe espaço para os botões do bottom tabs
+    paddingBottom: 20,
   },
   header: {
     flexDirection: 'row',
@@ -179,11 +175,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
   },
-  profileImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
   logoutButton: {
     backgroundColor: '#00796b',
     padding: 8,
@@ -196,7 +187,7 @@ const styles = StyleSheet.create({
   },
   motivationalContainer: {
     backgroundColor: '#1C5739',
-    padding: 20,
+    padding: 10,
     margin: 10,
     borderRadius: 10,
     alignItems: 'center',
@@ -209,7 +200,7 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     width: screenWidth * 0.8,
-    height: 200,
+    height: 120,
   },
   slide: {
     flex: 1,
@@ -222,9 +213,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'center',
     lineHeight: 24,
-  },
-  paginationStyle: {
-    bottom: 10,
   },
   imageButton: {
     width: 60,
@@ -254,14 +242,14 @@ const styles = StyleSheet.create({
   },
   card: {
     flex: 1,
-    width: screenWidth * 0.6, // Largura dos cartões para caber mais itens na rolagem horizontal
+    width: screenWidth * 0.5,
     marginRight: 10,
     borderRadius: 10,
     overflow: 'hidden',
   },
   cardImage: {
     width: '100%',
-    height: 120,
+    height: 100,
   },
   cardTitle: {
     position: 'absolute',

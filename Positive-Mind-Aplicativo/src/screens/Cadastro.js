@@ -14,7 +14,6 @@ const Cadastro = ({ navigation }) => {
   const db = getFirestore(firebaseApp);
   const userCollectionRef = collection(db, 'users');
 
-
   async function mkUser() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
@@ -95,7 +94,9 @@ const Cadastro = ({ navigation }) => {
           <Text style={[styles.buttonText, { color: 'white' }]}>Cadastre-se</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('Login')}>
-          <Text style={styles.loginButtonText}>Já tem conta? Faça o Login!</Text>
+          <Text style={styles.loginButtonText}>
+            Já tem conta? <Text style={styles.loginText}>Faça o Login!</Text>
+          </Text>
         </TouchableOpacity>
       </Animatable.View>
       <Text style={styles.footerText}>© Positive Mind</Text>
@@ -154,8 +155,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loginButtonText: {
-    color: '#000',
+    color: '#000', // Cor do texto principal
     fontSize: 14,
+  },
+  loginText: {
+    color: '#71BE99', // Cor verde apenas para "Faça o Login!"
   },
   footerText: {
     marginTop: 30,

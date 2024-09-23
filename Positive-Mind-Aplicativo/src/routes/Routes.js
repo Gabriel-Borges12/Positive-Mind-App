@@ -13,7 +13,6 @@ import HomeTeste from '../screens/Home';
 import Profissionais from '../screens/Profissionais';
 import SplashScreen from '../screens/SplashScreen';
 import DiarioEmocional from '../screens/DiarioEmocional';
-import AdicionarSituacao from '../screens/AdicionarSituacao';
 import Perfil from '../screens/Perfil';  
 import PassoAPasso from '../screens/PassoAPasso'; 
 import Feedback from '../screens/Feedback';
@@ -68,10 +67,6 @@ function AuthStack() {
              <Stack.Screen
                 name="Diário"
                 component={DiarioEmocional}
-            />
-             <Stack.Screen
-                name="Situação"
-                component={AdicionarSituacao}
             />
              <Stack.Screen
                 name="PassoAPasso"
@@ -142,19 +137,6 @@ function TabBottomRoutes() {
                     tabBarIcon: ({ focused, color, size }) => (
                         <Ionicons
                             name={focused ? 'book' : 'book-outline'}
-                            size={size}
-                            color={color}
-                        />
-                    ),
-                }}
-            />
-            <TabBottom.Screen
-                name="Situação"
-                component={AdicionarSituacao}
-                options={{
-                    tabBarIcon: ({ focused, color, size }) => (
-                        <Ionicons
-                            name={focused ? 'add' : 'add'}
                             size={size}
                             color={color}
                         />
