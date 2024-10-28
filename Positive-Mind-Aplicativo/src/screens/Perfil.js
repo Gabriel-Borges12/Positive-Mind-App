@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { getAuth, signOut } from 'firebase/auth';
 import { getFirestore, collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
-import { firebaseApp } from '../../firebase'; // Certifique-se do caminho correto
+import { firebaseApp } from '../../firebase';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import Icon from 'react-native-vector-icons/MaterialIcons'; // Importa o ícone
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const ProfileScreen = ({ navigation }) => {
   const [user, setUser] = useState(null);
-  const [profileImage, setProfileImage] = useState(null); // Estado para a imagem de perfil
-  const [userDocId, setUserDocId] = useState(null); // Guardar o ID do documento do usuário
+  const [profileImage, setProfileImage] = useState(null);
+  const [userDocId, setUserDocId] = useState(null);
+  const [isEditing, setIsEditing] = useState(false); // Estado para controle da edição
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -21,8 +24,6 @@ const ProfileScreen = ({ navigation }) => {
         if (currentUser) {
           const db = getFirestore(firebaseApp);
           const email = currentUser.email;
-
-          // Cria uma query para buscar o documento do usuário pelo email
           const usersCollection = collection(db, 'users');
           const q = query(usersCollection, where('email', '==', email));
           const querySnapshot = await getDocs(q);
@@ -33,10 +34,11 @@ const ProfileScreen = ({ navigation }) => {
             setUser(userData);
             setUserDocId(userDoc.id);
 
-            // Defina a imagem de perfil do Firestore, se houver
             if (userData.profileImage) {
               setProfileImage(userData.profileImage);
             }
+            setUserName(userData.nome || '');
+            setUserEmail(userData.email || '');
           } else {
             console.log('Documento do usuário não encontrado!');
           }
@@ -70,9 +72,8 @@ const ProfileScreen = ({ navigation }) => {
 
     if (!result.didCancel && result.assets && result.assets.length > 0) {
       const imageUri = result.assets[0].uri;
-      setProfileImage(imageUri); // Atualiza a imagem no estado
+      setProfileImage(imageUri);
 
-      // Faça o upload para o Firebase Storage
       await uploadImageToFirebase(imageUri);
     }
   };
@@ -82,22 +83,31 @@ const ProfileScreen = ({ navigation }) => {
       const auth = getAuth(firebaseApp);
       const currentUser = auth.currentUser;
 
-      if (!currentUser) return;
+      if (!currentUser) {
+        console.error('Usuário não autenticado');
+        return;
+      }
 
       const storage = getStorage(firebaseApp);
       const storageRef = ref(storage, `profileImages/${currentUser.uid}.jpg`);
 
-      // Converte a imagem URI em blob
+      // Baixar a imagem da URI e converter para Blob
       const response = await fetch(imageUri);
+      if (!response.ok) {
+        console.error('Erro ao baixar a imagem para upload');
+        return;
+      }
       const blob = await response.blob();
 
-      // Faz o upload da imagem
+      // Fazer upload da imagem para o Firebase Storage
       await uploadBytes(storageRef, blob);
+      console.log('Upload da imagem realizado com sucesso');
 
-      // Obtém a URL de download
+      // Obter a URL da imagem carregada
       const downloadURL = await getDownloadURL(storageRef);
+      console.log('URL da imagem:', downloadURL);
 
-      // Atualiza a URL da imagem no Firestore
+      // Atualizar a URL da imagem no Firestore
       await updateProfileImageURL(downloadURL);
     } catch (error) {
       console.error('Erro ao fazer upload da imagem:', error);
@@ -123,6 +133,56 @@ const ProfileScreen = ({ navigation }) => {
     }
   };
 
+  // Verificar se o nome já existe no Firestore
+  const checkIfUsernameExists = async (newUserName) => {
+    const db = getFirestore(firebaseApp);
+    const usersCollection = collection(db, 'users');
+    const q = query(usersCollection, where('nome', '==', newUserName));
+    const querySnapshot = await getDocs(q);
+
+    return !querySnapshot.empty; // Retorna true se houver um usuário com o mesmo nome
+  };
+
+  const handleSaveChanges = async () => {
+    try {
+      const db = getFirestore(firebaseApp);
+      const auth = getAuth(firebaseApp);
+      const currentUser = auth.currentUser;
+
+      if (!userDocId) {
+        console.error('ID do documento do usuário não encontrado!');
+        return;
+      }
+
+      // Verifica se o novo nome de usuário já existe
+      if (userName !== user.nome) {
+        const usernameExists = await checkIfUsernameExists(userName);
+        if (usernameExists) {
+          Alert.alert('Erro', 'Nome de usuário já existe. Por favor, escolha outro.');
+          return;
+        }
+      }
+
+      const userDocRef = doc(db, 'users', userDocId);
+
+      await updateDoc(userDocRef, {
+        nome: userName,
+        email: userEmail,
+      });
+
+      // Atualiza o email no Firebase Authentication
+      if (currentUser.email !== userEmail) {
+        await currentUser.updateEmail(userEmail);
+      }
+
+      setIsEditing(false);
+      Alert.alert('Sucesso', 'Perfil atualizado com sucesso!');
+    } catch (error) {
+      console.error('Erro ao atualizar o perfil:', error);
+      Alert.alert('Erro', 'Ocorreu um erro ao atualizar o perfil.');
+    }
+  };
+
   if (!user) {
     return (
       <View style={styles.loadingContainer}>
@@ -137,10 +197,7 @@ const ProfileScreen = ({ navigation }) => {
         <View style={styles.imageContainer}>
           <TouchableOpacity onPress={handleImagePick} style={styles.imageWrapper}>
             {profileImage ? (
-              <Image
-                source={{ uri: profileImage }}
-                style={styles.profileImage}
-              />
+              <Image source={{ uri: profileImage }} style={styles.profileImage} />
             ) : (
               <View style={styles.placeholderImage} />
             )}
@@ -152,35 +209,65 @@ const ProfileScreen = ({ navigation }) => {
       </View>
       <View style={styles.body}>
         <Text style={styles.label}>Nome de Usuário:</Text>
-        <Text style={styles.info}>{user.nome || 'Usuário'}</Text>
+        {isEditing ? (
+          <TextInput
+            style={styles.input}
+            value={userName}
+            onChangeText={setUserName}
+          />
+        ) : (
+          <Text style={styles.info}>{userName}</Text>
+        )}
 
         <Text style={styles.label}>Email:</Text>
-        <Text style={styles.info}>{user.email}</Text>
+        {isEditing ? (
+          <TextInput
+            style={styles.input}
+            value={userEmail}
+            onChangeText={setUserEmail}
+          />
+        ) : (
+          <Text style={styles.info}>{userEmail}</Text>
+        )}
 
-        <Text style={styles.logout} onPress={handleLogout}>
-          Sair
-        </Text>
+        {isEditing ? (
+          <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
+            <Text style={styles.saveButtonText}>Salvar</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.editButton} onPress={() => setIsEditing(true)}>
+            <Text style={styles.editButtonText}>Editar Perfil</Text>
+          </TouchableOpacity>
+        )}
+
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Text style={styles.logoutText}>Sair</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
 };
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#f4f4f4',
     alignItems: 'center',
   },
   header: {
     width: '100%',
+    height: 220,
     backgroundColor: '#25724D',
-    padding: 60,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingBottom: 30,
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
   },
   imageContainer: {
     position: 'relative',
-    marginBottom: -60,
+    marginBottom: -50,
   },
   imageWrapper: {
     position: 'relative',
@@ -192,6 +279,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#CCCCCC',
     borderWidth: 4,
     borderColor: '#fff',
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
   },
   placeholderImage: {
     width: 140,
@@ -215,9 +306,13 @@ const styles = StyleSheet.create({
     width: '90%',
     padding: 20,
     backgroundColor: '#FFFFFF',
-    marginTop: 20,
+    marginTop: 40,
     borderRadius: 10,
     alignItems: 'flex-start',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 5 },
   },
   label: {
     fontSize: 16,
@@ -229,11 +324,53 @@ const styles = StyleSheet.create({
     color: '#666666',
     marginBottom: 20,
   },
-  logout: {
+  input: {
+    fontSize: 18,
+    color: '#333',
+    backgroundColor: '#f0f0f0',
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 20,
+    width: '100%',
+  },
+  editButton: {
+    backgroundColor: '#25724D',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 20,
+  },
+  editButtonText: {
+    color: '#fff',
     fontSize: 16,
-    color: '#00796b',
+    fontWeight: 'bold',
+  },
+  saveButton: {
+    backgroundColor: '#25724D',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 20,
+  },
+  saveButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  logoutButton: {
+    backgroundColor: '#25724D',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    width: '100%',
     marginTop: 20,
-    textDecorationLine: 'underline',
+  },
+  logoutText: {
+    fontSize: 16,
+    color: '#fff',
+    fontWeight: 'bold',
   },
   loadingContainer: {
     flex: 1,

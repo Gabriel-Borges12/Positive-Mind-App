@@ -16,6 +16,10 @@ import DiarioEmocional from '../screens/DiarioEmocional';
 import Perfil from '../screens/Perfil';  
 import PassoAPasso from '../screens/PassoAPasso'; 
 import Feedback from '../screens/Feedback';
+import HealthDetail from '../screens/HealthDetail';
+import BreathingExercise from '../screens/BreathingExercise';
+import MuscleRelaxation from '../screens/MuscleRelaxation';
+import MemoryGame from '../screens/MemoryGame';
 
 
 const Stack = createStackNavigator();
@@ -75,6 +79,22 @@ function AuthStack() {
             <Stack.Screen
                 name="Feedback"
                 component={Feedback}
+            />
+             <Stack.Screen
+                name="HealthDetail"
+                component={HealthDetail}
+            />
+             <Stack.Screen
+                name="BreathingExercise"
+                component={BreathingExercise}
+            />
+            <Stack.Screen
+                name="MuscleRelaxation"
+                component={MuscleRelaxation}
+            />
+            <Stack.Screen
+                name="MemoryGame"
+                component={MemoryGame}
             />
         </Stack.Navigator>
     );

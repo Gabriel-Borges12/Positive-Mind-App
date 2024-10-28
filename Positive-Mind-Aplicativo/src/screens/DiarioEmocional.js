@@ -67,7 +67,7 @@ const DiarioEmocional = () => {
   // Navegar para o próximo dia (caso seja diferente de hoje)
   const goToNextDay = () => {
     const nextDate = moment(currentDate, 'LL').add(1, 'days').format('LL');
-    if (nextDate <= moment().format('LL')) {
+    if (!moment(nextDate, 'LL').isAfter(moment())) {
       setCurrentDate(nextDate);
     }
   };
@@ -146,9 +146,9 @@ const DiarioEmocional = () => {
           <Text style={styles.saveButtonText}>Salvar</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.navButton, currentDate === moment().format('LL') && styles.disabledButton]}
+          style={[styles.navButton, moment(currentDate, 'LL').isSame(moment(), 'day') && styles.disabledButton]}
           onPress={goToNextDay}
-          disabled={currentDate === moment().format('LL')}
+          disabled={moment(currentDate, 'LL').isSame(moment(), 'day')}
         >
           <Text style={styles.navButtonText}>Próximo Dia</Text>
         </TouchableOpacity>

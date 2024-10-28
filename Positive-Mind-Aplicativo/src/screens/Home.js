@@ -16,6 +16,21 @@ const frases = [
   "Só existe um êxito: a capacidade de viver a vida do seu jeito."
 ];
 
+const healthInfo = [
+  {
+    title: "Ansiedade",
+    content: "A ansiedade é uma resposta natural do corpo ao estresse. É importante reconhecer e entender os sinais de ansiedade."
+  },
+  {
+    title: "Depressão",
+    content: "A depressão é uma condição séria que afeta o modo como você se sente, pensa e lida com as atividades diárias."
+  },
+  {
+    title: "Estresse",
+    content: "O estresse é a reação do corpo a um desafio ou demanda. É importante encontrar formas de gerenciar o estresse."
+  }
+];
+
 export default function Home({ navigation }) {
   const [username, setUsername] = useState('');
 
@@ -99,16 +114,16 @@ export default function Home({ navigation }) {
           <Text style={styles.sectionTitle}>Informações sobre saúde mental</Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={styles.rowContainer}>
-              <TouchableOpacity style={styles.card}>
-                <Image source={require('../assets/health.jpg')} style={styles.cardImage} />
-                <Text style={styles.cardTitle}>{username}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.card}>
-                <Image source={require('../assets/health.jpg')} style={styles.cardImage} />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.card}>
-                <Image source={require('../assets/health.jpg')} style={styles.cardImage} />
-              </TouchableOpacity>
+              {healthInfo.map((info, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.card}
+                  onPress={() => navigation.navigate('HealthDetail', { title: info.title, content: info.content })}
+                >
+                  <Image source={require('../assets/health.jpg')} style={styles.cardImage} />
+                  <Text style={styles.cardTitle}>{info.title}</Text>
+                </TouchableOpacity>
+              ))}
             </View>
           </ScrollView>
         </View>
@@ -117,15 +132,21 @@ export default function Home({ navigation }) {
           <Text style={styles.sectionTitle}>Exercícios e Técnicas</Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={styles.rowContainer}>
-              <TouchableOpacity style={styles.card}>
+              <TouchableOpacity onPress={() => navigation.navigate('BreathingExercise')} style={styles.card}>
                 <Image source={require('../assets/peoplereunion.jpg')} style={styles.cardImage} />
+                <Text style={styles.cardTitle}>Respiração Controlada</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.card}>
+
+              <TouchableOpacity onPress={() => navigation.navigate('MuscleRelaxation')} style={styles.card}>
                 <Image source={require('../assets/peoplereunion.jpg')} style={styles.cardImage} />
+                <Text style={styles.cardTitle}>Relaxamento Muscular</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.card}>
+
+              <TouchableOpacity onPress={() => navigation.navigate('MemoryGame')} style={styles.card}>
                 <Image source={require('../assets/peoplereunion.jpg')} style={styles.cardImage} />
+                <Text style={styles.cardTitle}>Jogo da Memória</Text>
               </TouchableOpacity>
+
             </View>
           </ScrollView>
         </View>
